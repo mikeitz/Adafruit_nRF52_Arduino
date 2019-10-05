@@ -51,6 +51,16 @@ int attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
  */
 void detachInterrupt(uint32_t pin);
 
+/*
+ * \brief Add a callback that gets to act on any interrupt.
+ */
+void attachCustomInterruptHandler(voidFuncPtr callback);
+
+/*
+ * \brief Turn off any custom interrupt handler.
+ */
+void detachCustomInterruptHandler();
+
 #ifdef __cplusplus
 }
 #endif

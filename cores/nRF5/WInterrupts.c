@@ -37,6 +37,7 @@
 #endif
 
 static voidFuncPtr callbacksInt[NUMBER_OF_GPIO_TE];
+static voidFuncPtr customHandlerCallback = NULL;
 static bool callbackDeferred[NUMBER_OF_GPIO_TE];
 static int8_t channelMap[NUMBER_OF_GPIO_TE];
 static int enabled = 0;
@@ -142,8 +143,19 @@ void detachInterrupt(uint32_t pin)
   }
 }
 
+void attachCustomInterruptHandler(voidFuncPtr callback) {
+  customHandlerCallback = callback;
+}
+
+void detachCustomInterruptHandler() {
+  customHandlerCallback = 0;
+}
+
 void GPIOTE_IRQHandler()
 {
+  if (customHandlerCallback) {
+    customHandlerCallback();
+  }
   uint32_t event = offsetof(NRF_GPIOTE_Type, EVENTS_IN[0]);
 
   for (int ch = 0; ch < NUMBER_OF_GPIO_TE; ch++) {
