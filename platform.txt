@@ -21,7 +21,6 @@ version=0.14.0
 
 nordic.path={build.core.path}/nordic
 gzll.include=-I{nordic.path}/gzll/include
-gzll.objs={nordic.path}/gzll/objs/app_util_platform.c.o {nordic.path}/gzll/objs/nrf_assert.c.o {nordic.path}/gzll/objs/nrf_assert_internal.c.o {nordic.path}/gzll/objs/nrf_channel_manager.c.o {nordic.path}/gzll/objs/nrf_fifo.c.o {nordic.path}/gzll/objs/nrf_flywheel.c.o {nordic.path}/gzll/objs/nrf_gzll.c.o {nordic.path}/gzll/objs/nrf_impala.c.o {nordic.path}/gzll/objs/nrf_link_core.c.o {nordic.path}/gzll/objs/nrf_notification_manager.c.o {nordic.path}/gzll/objs/nrf_packet_manager.c.o {nordic.path}/gzll/objs/nrf_state_machine.c.o
 
 # Compile variables
 # -----------------
@@ -94,7 +93,7 @@ recipe.S.o.pattern="{compiler.path}{compiler.S.cmd}" {compiler.S.flags} -DF_CPU=
 recipe.ar.pattern="{compiler.path}{compiler.ar.cmd}" {compiler.ar.flags} {compiler.ar.extra_flags} "{archive_file_path}" "{object_file}"
 
 ## Combine gc-sections, archives, and objects
-recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}"  "-L{build.path}" {compiler.c.elf.flags} {compiler.c.elf.extra_flags} "-L{build.core.path}/linker" "-T{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.ldflags} -o "{build.path}/{build.project_name}.elf" {object_files} {gzll.objs} -Wl,--start-group -lm "{build.path}/{archive_file}" -Wl,--end-group
+recipe.c.combine.pattern="{compiler.path}{compiler.c.elf.cmd}"  "-L{build.path}" {compiler.c.elf.flags} {compiler.c.elf.extra_flags} "-L{build.core.path}/linker" "-T{build.ldscript}" "-Wl,-Map,{build.path}/{build.project_name}.map" {compiler.ldflags} -o "{build.path}/{build.project_name}.elf" {object_files} {build.gzll.objs} -Wl,--start-group -lm "{build.path}/{archive_file}" -Wl,--end-group
 
 ## Create output (bin file)
 #recipe.objcopy.bin.pattern="{compiler.path}{compiler.elf2bin.cmd}" {compiler.elf2bin.flags} {compiler.elf2bin.extra_flags} "{build.path}/{build.project_name}.elf" "{build.path}/{build.project_name}.bin"

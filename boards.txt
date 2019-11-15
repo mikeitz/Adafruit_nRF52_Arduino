@@ -19,6 +19,11 @@
 menu.softdevice=Bootloader
 menu.debug=Debug
 
+# Arduino15\\packages\\arduino\\tools\\arm-none-eabi-gcc\\7-2017q4/bin/arm-none-eabi-ar x gzll_nrf52840_gcc.a
+# for f in * ; do echo -n {nordic.path}/gzll/objs/$f\ ; done
+feather52832.build.gzll.objs={nordic.path}/gzll/objs/app_util_platform.c.o {nordic.path}/gzll/objs/nrf_assert.c.o {nordic.path}/gzll/objs/nrf_assert_internal.c.o {nordic.path}/gzll/objs/nrf_channel_manager.c.o {nordic.path}/gzll/objs/nrf_fifo.c.o {nordic.path}/gzll/objs/nrf_flywheel.c.o {nordic.path}/gzll/objs/nrf_gzll.c.o {nordic.path}/gzll/objs/nrf_impala.c.o {nordic.path}/gzll/objs/nrf_link_core.c.o {nordic.path}/gzll/objs/nrf_notification_manager.c.o {nordic.path}/gzll/objs/nrf_packet_manager.c.o {nordic.path}/gzll/objs/nrf_state_machine.c.o
+feather52840.build.gzll.objs={nordic.path}/gzll/objs_52840/nrf_assert.c.o {nordic.path}/gzll/objs_52840/nrf_assert_internal.c.o {nordic.path}/gzll/objs_52840/nrf_channel_manager.c.o {nordic.path}/gzll/objs_52840/nrf_fifo.c.o {nordic.path}/gzll/objs_52840/nrf_flywheel.c.o {nordic.path}/gzll/objs_52840/nrf_gzll.c.o {nordic.path}/gzll/objs_52840/nrf_impala.c.o {nordic.path}/gzll/objs_52840/nrf_link_core.c.o {nordic.path}/gzll/objs_52840/nrf_notification_manager.c.o {nordic.path}/gzll/objs_52840/nrf_packet_manager.c.o {nordic.path}/gzll/objs_52840/nrf_state_machine.c.o {nordic.path}/gzll/objs_52840/system_nrf52840.c.o
+
 # ----------------------------------
 # Bluefruit Feather nRF52832
 # ----------------------------------
