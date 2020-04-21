@@ -37,7 +37,7 @@
 #endif
 
 static voidFuncPtr callbacksInt[NUMBER_OF_GPIO_TE];
-static voidFuncPtr customHandlerCallback = NULL;
+static voidFuncPtr portEventHandlerCallback = NULL;
 static bool callbackDeferred[NUMBER_OF_GPIO_TE];
 static int8_t channelMap[NUMBER_OF_GPIO_TE];
 static int enabled = 0;
@@ -143,18 +143,18 @@ void detachInterrupt(uint32_t pin)
   }
 }
 
-void attachCustomInterruptHandler(voidFuncPtr callback) {
+void attachOneShotPortEventHandler(voidFuncPtr callback) {
   if (!enabled) {
     __initialize();
     enabled = 1;
   }
-  customHandlerCallback = callback;
+  portEventHandlerCallback = callback;
   NRF_GPIOTE->EVENTS_PORT = 0;
   NRF_GPIOTE->INTENSET |= GPIOTE_INTENSET_PORT_Msk;
 }
 
-void detachCustomInterruptHandler() {
-  customHandlerCallback = 0;
+void detachOneShotPortEventHandler() {
+  portEventHandlerCallback = 0;
   NRF_GPIOTE->INTENCLR |= GPIOTE_INTENSET_PORT_Msk;
   NRF_GPIOTE->EVENTS_PORT = 0;
 }
@@ -162,9 +162,10 @@ void detachCustomInterruptHandler() {
 void GPIOTE_IRQHandler()
 {
   if (NRF_GPIOTE->INTENSET & GPIOTE_INTENSET_PORT_Msk) {
+    NRF_GPIOTE->INTENCLR |= GPIOTE_INTENSET_PORT_Msk;
     NRF_GPIOTE->EVENTS_PORT = 0;
-    if (customHandlerCallback) {
-      ada_callback(NULL, 0, customHandlerCallback);
+    if (portEventHandlerCallback) {
+      ada_callback(NULL, 0, portEventHandlerCallback);
     }
   }
   uint32_t event = offsetof(NRF_GPIOTE_Type, EVENTS_IN[0]);

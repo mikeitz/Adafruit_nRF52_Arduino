@@ -52,14 +52,14 @@ int attachInterrupt(uint32_t pin, voidFuncPtr callback, uint32_t mode);
 void detachInterrupt(uint32_t pin);
 
 /*
- * \brief Add a callback that gets to act on any interrupt.
+ * \brief Add a callback for the port event that will fire once.
  */
-void attachCustomInterruptHandler(voidFuncPtr callback);
+void attachOneShotPortEventHandler(voidFuncPtr callback);
 
 /*
- * \brief Turn off any custom interrupt handler.
+ * \brief Turn off any port event handler.
  */
-void detachCustomInterruptHandler();
+void detachOneShotPortEventHandler();
 
 #ifdef __cplusplus
 }
