@@ -144,17 +144,28 @@ void detachInterrupt(uint32_t pin)
 }
 
 void attachCustomInterruptHandler(voidFuncPtr callback) {
+  if (!enabled) {
+    __initialize();
+    enabled = 1;
+  }
   customHandlerCallback = callback;
+  NRF_GPIOTE->EVENTS_PORT = 0;
+  NRF_GPIOTE->INTENSET |= GPIOTE_INTENSET_PORT_Msk;
 }
 
 void detachCustomInterruptHandler() {
   customHandlerCallback = 0;
+  NRF_GPIOTE->INTENCLR |= GPIOTE_INTENSET_PORT_Msk;
+  NRF_GPIOTE->EVENTS_PORT = 0;
 }
 
 void GPIOTE_IRQHandler()
 {
-  if (customHandlerCallback) {
-    customHandlerCallback();
+  if (NRF_GPIOTE->INTENSET & GPIOTE_INTENSET_PORT_Msk) {
+    NRF_GPIOTE->EVENTS_PORT = 0;
+    if (customHandlerCallback) {
+      ada_callback(NULL, 0, customHandlerCallback);
+    }
   }
   uint32_t event = offsetof(NRF_GPIOTE_Type, EVENTS_IN[0]);
 
