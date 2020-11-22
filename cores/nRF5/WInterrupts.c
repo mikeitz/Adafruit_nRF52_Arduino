@@ -166,6 +166,7 @@ void GPIOTE_IRQHandler()
     NRF_GPIOTE->EVENTS_PORT = 0;
     if (portEventHandlerCallback) {
       ada_callback(NULL, 0, portEventHandlerCallback);
+      return;
     }
   }
   uint32_t event = offsetof(NRF_GPIOTE_Type, EVENTS_IN[0]);
