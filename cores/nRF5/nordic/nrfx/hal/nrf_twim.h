@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 - 2020, Nordic Semiconductor ASA
+ * Copyright (c) 2015 - 2019, Nordic Semiconductor ASA
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,19 +45,26 @@ extern "C" {
  * @brief   Hardware access layer for managing the TWIM peripheral.
  */
 
-/** @brief TWIM tasks. */
+/**
+ * @brief TWIM tasks.
+ */
 typedef enum
 {
+    /*lint -save -e30*/
     NRF_TWIM_TASK_STARTRX = offsetof(NRF_TWIM_Type, TASKS_STARTRX), ///< Start TWI receive sequence.
     NRF_TWIM_TASK_STARTTX = offsetof(NRF_TWIM_Type, TASKS_STARTTX), ///< Start TWI transmit sequence.
     NRF_TWIM_TASK_STOP    = offsetof(NRF_TWIM_Type, TASKS_STOP),    ///< Stop TWI transaction.
     NRF_TWIM_TASK_SUSPEND = offsetof(NRF_TWIM_Type, TASKS_SUSPEND), ///< Suspend TWI transaction.
     NRF_TWIM_TASK_RESUME  = offsetof(NRF_TWIM_Type, TASKS_RESUME)   ///< Resume TWI transaction.
+    /*lint -restore*/
 } nrf_twim_task_t;
 
-/** @brief TWIM events. */
+/**
+ * @brief TWIM events.
+ */
 typedef enum
 {
+    /*lint -save -e30*/
     NRF_TWIM_EVENT_STOPPED   = offsetof(NRF_TWIM_Type, EVENTS_STOPPED),   ///< TWI stopped.
     NRF_TWIM_EVENT_ERROR     = offsetof(NRF_TWIM_Type, EVENTS_ERROR),     ///< TWI error.
     NRF_TWIM_EVENT_SUSPENDED = 0x148,                                     ///< TWI suspended.
@@ -65,9 +72,12 @@ typedef enum
     NRF_TWIM_EVENT_TXSTARTED = offsetof(NRF_TWIM_Type, EVENTS_TXSTARTED), ///< Transmit sequence started.
     NRF_TWIM_EVENT_LASTRX    = offsetof(NRF_TWIM_Type, EVENTS_LASTRX),    ///< Byte boundary, starting to receive the last byte.
     NRF_TWIM_EVENT_LASTTX    = offsetof(NRF_TWIM_Type, EVENTS_LASTTX)     ///< Byte boundary, starting to transmit the last byte.
+    /*lint -restore*/
 } nrf_twim_event_t;
 
-/** @brief TWIM shortcuts. */
+/**
+ * @brief TWIM shortcuts.
+ */
 typedef enum
 {
     NRF_TWIM_SHORT_LASTTX_STARTRX_MASK = TWIM_SHORTS_LASTTX_STARTRX_Msk,  ///< Shortcut between LASTTX event and STARTRX task.
@@ -82,7 +92,9 @@ typedef enum
                                          TWIM_SHORTS_LASTRX_STOP_Msk      ///< All TWIM shortcuts.
 } nrf_twim_short_mask_t;
 
-/** @brief TWIM interrupts. */
+/**
+ * @brief TWIM interrupts.
+ */
 typedef enum
 {
     NRF_TWIM_INT_STOPPED_MASK   = TWIM_INTENSET_STOPPED_Msk,   ///< Interrupt on STOPPED event.
@@ -91,135 +103,135 @@ typedef enum
     NRF_TWIM_INT_RXSTARTED_MASK = TWIM_INTENSET_RXSTARTED_Msk, ///< Interrupt on RXSTARTED event.
     NRF_TWIM_INT_TXSTARTED_MASK = TWIM_INTENSET_TXSTARTED_Msk, ///< Interrupt on TXSTARTED event.
     NRF_TWIM_INT_LASTRX_MASK    = TWIM_INTENSET_LASTRX_Msk,    ///< Interrupt on LASTRX event.
-    NRF_TWIM_INT_LASTTX_MASK    = TWIM_INTENSET_LASTTX_Msk,    ///< Interrupt on LASTTX event.
+    NRF_TWIM_INT_LASTTX_MASK    = TWIM_INTENSET_LASTTX_Msk,     ///< Interrupt on LASTTX event.
     NRF_TWIM_ALL_INTS_MASK      = TWIM_INTENSET_STOPPED_Msk   |
                                   TWIM_INTENSET_ERROR_Msk     |
                                   TWIM_INTENSET_SUSPENDED_Msk |
                                   TWIM_INTENSET_RXSTARTED_Msk |
                                   TWIM_INTENSET_TXSTARTED_Msk |
                                   TWIM_INTENSET_LASTRX_Msk    |
-                                  TWIM_INTENSET_LASTTX_Msk     ///< All TWIM interrupts.
+                                  TWIM_INTENSET_LASTTX_Msk      ///< Interrupt on LASTTX event.
 } nrf_twim_int_mask_t;
 
-/** @brief TWIM master clock frequency. */
+/**
+ * @brief TWIM master clock frequency.
+ */
 typedef enum
 {
-    NRF_TWIM_FREQ_100K  = TWIM_FREQUENCY_FREQUENCY_K100, ///< 100 kbps.
-    NRF_TWIM_FREQ_250K  = TWIM_FREQUENCY_FREQUENCY_K250, ///< 250 kbps.
-    NRF_TWIM_FREQ_400K  = TWIM_FREQUENCY_FREQUENCY_K400, ///< 400 kbps.
-#if defined(TWIM_FREQUENCY_FREQUENCY_K1000) || defined(__NRFX_DOXYGEN__)
-    NRF_TWIM_FREQ_1000K = TWIM_FREQUENCY_FREQUENCY_K1000 ///< 1000 kbps.
-#endif
+    NRF_TWIM_FREQ_100K = TWIM_FREQUENCY_FREQUENCY_K100, ///< 100 kbps.
+    NRF_TWIM_FREQ_250K = TWIM_FREQUENCY_FREQUENCY_K250, ///< 250 kbps.
+    NRF_TWIM_FREQ_400K = TWIM_FREQUENCY_FREQUENCY_K400  ///< 400 kbps.
 } nrf_twim_frequency_t;
 
-/** @brief TWIM error source. */
+/**
+ * @brief TWIM error source.
+ */
 typedef enum
 {
-    NRF_TWIM_ERROR_ADDRESS_NACK = TWIM_ERRORSRC_ANACK_Msk,  ///< NACK received after sending the address.
-    NRF_TWIM_ERROR_DATA_NACK    = TWIM_ERRORSRC_DNACK_Msk,  ///< NACK received after sending a data byte.
-    NRF_TWIM_ERROR_OVERRUN      = TWIM_ERRORSRC_OVERRUN_Msk ///< Overrun error.
-                                                            /**< A new byte was received before the previous byte was
-                                                             *   handled by peripheral. (previous data is lost). */
+    NRF_TWIM_ERROR_ADDRESS_NACK = TWIM_ERRORSRC_ANACK_Msk, ///< NACK received after sending the address.
+    NRF_TWIM_ERROR_DATA_NACK    = TWIM_ERRORSRC_DNACK_Msk  ///< NACK received after sending a data byte.
 } nrf_twim_error_t;
 
 
 /**
- * @brief Function for activating the specified TWIM task.
+ * @brief Function for activating a specific TWIM task.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] task  Task to be activated.
+ * @param[in] p_reg Pointer to the peripheral registers structure.
+ * @param[in] task   Task to activate.
  */
-NRF_STATIC_INLINE void nrf_twim_task_trigger(NRF_TWIM_Type * p_reg,
-                                             nrf_twim_task_t task);
+__STATIC_INLINE void nrf_twim_task_trigger(NRF_TWIM_Type * p_reg,
+                                           nrf_twim_task_t task);
 
 /**
- * @brief Function for getting the address of the specified TWIM task register.
+ * @brief Function for getting the address of a specific TWIM task register.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] task  The specified task.
+ * @param[in] p_reg Pointer to the peripheral registers structure.
+ * @param[in] task   Requested task.
  *
  * @return Address of the specified task register.
  */
-NRF_STATIC_INLINE uint32_t nrf_twim_task_address_get(NRF_TWIM_Type const * p_reg,
-                                                     nrf_twim_task_t       task);
+__STATIC_INLINE uint32_t * nrf_twim_task_address_get(NRF_TWIM_Type * p_reg,
+                                                     nrf_twim_task_t task);
 
 /**
- * @brief Function for clearing the specified TWIM event.
+ * @brief Function for clearing a specific TWIM event.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] event Event to clear.
+ * @param[in] p_reg Pointer to the peripheral registers structure.
+ * @param[in] event  Event to clear.
  */
-NRF_STATIC_INLINE void nrf_twim_event_clear(NRF_TWIM_Type *  p_reg,
-                                            nrf_twim_event_t event);
+__STATIC_INLINE void nrf_twim_event_clear(NRF_TWIM_Type * p_reg,
+                                          nrf_twim_event_t event);
 
 /**
- * @brief Function for retrieving the state of the TWIM event.
+ * @brief Function for checking the state of a specific TWIM event.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] event Event to be checked.
+ * @param[in] p_reg Pointer to the peripheral registers structure.
+ * @param[in] event  Event to check.
  *
- * @retval true  The event has been generated.
- * @retval false The event has not been generated.
+ * @retval true  If the event is set.
+ * @retval false If the event is not set.
  */
-NRF_STATIC_INLINE bool nrf_twim_event_check(NRF_TWIM_Type const * p_reg,
-                                            nrf_twim_event_t      event);
+__STATIC_INLINE bool nrf_twim_event_check(NRF_TWIM_Type * p_reg,
+                                          nrf_twim_event_t event);
 
 /**
- * @brief Function for getting the address of the specified TWIM event register.
+ * @brief Function for getting the address of a specific TWIM event register.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] event The specified event.
+ * @param[in] p_reg Pointer to the peripheral registers structure.
+ * @param[in] event  Requested event.
  *
  * @return Address of the specified event register.
  */
-NRF_STATIC_INLINE uint32_t nrf_twim_event_address_get(NRF_TWIM_Type const * p_reg,
-                                                      nrf_twim_event_t      event);
+__STATIC_INLINE uint32_t * nrf_twim_event_address_get(NRF_TWIM_Type  * p_reg,
+                                                      nrf_twim_event_t event);
 
 /**
- * @brief Function for enabling the specified shortcuts.
+ * @brief Function for enabling specified shortcuts.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] mask  Shortcuts to be enabled.
+ * @param[in] p_reg      Pointer to the peripheral registers structure.
+ * @param[in] shorts_mask Shortcuts to enable.
  */
-NRF_STATIC_INLINE void nrf_twim_shorts_enable(NRF_TWIM_Type * p_reg,
-                                              uint32_t        mask);
+__STATIC_INLINE void nrf_twim_shorts_enable(NRF_TWIM_Type * p_reg,
+                                            uint32_t shorts_mask);
 
 /**
- * @brief Function for disabling the specified shortcuts.
+ * @brief Function for disabling specified shortcuts.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] mask  Shortcuts to be disabled.
+ * @param[in] p_reg      Pointer to the peripheral registers structure.
+ * @param[in] shorts_mask Shortcuts to disable.
  */
-NRF_STATIC_INLINE void nrf_twim_shorts_disable(NRF_TWIM_Type * p_reg,
-                                               uint32_t        mask);
+__STATIC_INLINE void nrf_twim_shorts_disable(NRF_TWIM_Type * p_reg,
+                                             uint32_t shorts_mask);
 
 /**
- * @brief Function for enabling the specified interrupts.
+ * @brief Function for enabling specified interrupts.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] mask  Mask of interrupts to be enabled.
+ * @param[in] p_reg   Pointer to the peripheral registers structure.
+ * @param[in] int_mask Interrupts to enable.
  */
-NRF_STATIC_INLINE void nrf_twim_int_enable(NRF_TWIM_Type * p_reg,
-                                           uint32_t        mask);
+__STATIC_INLINE void nrf_twim_int_enable(NRF_TWIM_Type * p_reg,
+                                         uint32_t int_mask);
 
 /**
- * @brief Function for disabling the specified interrupts.
+ * @brief Function for disabling specified interrupts.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] mask  Mask of interrupts to be disabled.
+ * @param[in] p_reg   Pointer to the peripheral registers structure.
+ * @param[in] int_mask Interrupts to disable.
  */
-NRF_STATIC_INLINE void nrf_twim_int_disable(NRF_TWIM_Type * p_reg,
-                                            uint32_t        mask);
+__STATIC_INLINE void nrf_twim_int_disable(NRF_TWIM_Type * p_reg,
+                                          uint32_t int_mask);
 
 /**
- * @brief Function for checking if the specified interrupts are enabled.
+ * @brief Function for checking the state of a given interrupt.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] mask  Mask of interrupts to be checked.
+ * @param[in] p_reg   Pointer to the peripheral registers structure.
+ * @param[in] int_mask Interrupt to check.
  *
- * @return Mask of enabled interrupts.
+ * @retval true  If the interrupt is enabled.
+ * @retval false If the interrupt is not enabled.
  */
-NRF_STATIC_INLINE uint32_t nrf_twim_int_enable_check(NRF_TWIM_Type const * p_reg, uint32_t mask);
+__STATIC_INLINE bool nrf_twim_int_enable_check(NRF_TWIM_Type * p_reg,
+                                               nrf_twim_int_mask_t int_mask);
 
 #if defined(DPPI_PRESENT) || defined(__NRFX_DOXYGEN__)
 /**
@@ -230,9 +242,9 @@ NRF_STATIC_INLINE uint32_t nrf_twim_int_enable_check(NRF_TWIM_Type const * p_reg
  * @param[in] task    Task for which to set the configuration.
  * @param[in] channel Channel through which to subscribe events.
  */
-NRF_STATIC_INLINE void nrf_twim_subscribe_set(NRF_TWIM_Type * p_reg,
-                                              nrf_twim_task_t task,
-                                              uint8_t         channel);
+__STATIC_INLINE void nrf_twim_subscribe_set(NRF_TWIM_Type * p_reg,
+                                            nrf_twim_task_t task,
+                                            uint8_t         channel);
 
 /**
  * @brief Function for clearing the subscribe configuration for a given
@@ -241,8 +253,8 @@ NRF_STATIC_INLINE void nrf_twim_subscribe_set(NRF_TWIM_Type * p_reg,
  * @param[in] p_reg Pointer to the structure of registers of the peripheral.
  * @param[in] task  Task for which to clear the configuration.
  */
-NRF_STATIC_INLINE void nrf_twim_subscribe_clear(NRF_TWIM_Type * p_reg,
-                                                nrf_twim_task_t task);
+__STATIC_INLINE void nrf_twim_subscribe_clear(NRF_TWIM_Type * p_reg,
+                                              nrf_twim_task_t task);
 
 /**
  * @brief Function for setting the publish configuration for a given
@@ -252,9 +264,9 @@ NRF_STATIC_INLINE void nrf_twim_subscribe_clear(NRF_TWIM_Type * p_reg,
  * @param[in] event   Event for which to set the configuration.
  * @param[in] channel Channel through which to publish the event.
  */
-NRF_STATIC_INLINE void nrf_twim_publish_set(NRF_TWIM_Type *  p_reg,
-                                            nrf_twim_event_t event,
-                                            uint8_t         channel);
+__STATIC_INLINE void nrf_twim_publish_set(NRF_TWIM_Type *  p_reg,
+                                          nrf_twim_event_t event,
+                                          uint8_t         channel);
 
 /**
  * @brief Function for clearing the publish configuration for a given
@@ -263,167 +275,138 @@ NRF_STATIC_INLINE void nrf_twim_publish_set(NRF_TWIM_Type *  p_reg,
  * @param[in] p_reg Pointer to the structure of registers of the peripheral.
  * @param[in] event Event for which to clear the configuration.
  */
-NRF_STATIC_INLINE void nrf_twim_publish_clear(NRF_TWIM_Type *  p_reg,
-                                              nrf_twim_event_t event);
+__STATIC_INLINE void nrf_twim_publish_clear(NRF_TWIM_Type *  p_reg,
+                                            nrf_twim_event_t event);
 #endif // defined(DPPI_PRESENT) || defined(__NRFX_DOXYGEN__)
 
 /**
  * @brief Function for enabling the TWIM peripheral.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
+ * @param[in] p_reg Pointer to the peripheral registers structure.
  */
-NRF_STATIC_INLINE void nrf_twim_enable(NRF_TWIM_Type * p_reg);
+__STATIC_INLINE void nrf_twim_enable(NRF_TWIM_Type * p_reg);
 
 /**
  * @brief Function for disabling the TWIM peripheral.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
+ * @param[in] p_reg Pointer to the peripheral registers structure.
  */
-NRF_STATIC_INLINE void nrf_twim_disable(NRF_TWIM_Type * p_reg);
+__STATIC_INLINE void nrf_twim_disable(NRF_TWIM_Type * p_reg);
 
 /**
  * @brief Function for configuring TWI pins.
  *
- * @param[in] p_reg   Pointer to the structure of registers of the peripheral.
+ *
+ * @param[in] p_reg  Pointer to the peripheral registers structure.
  * @param[in] scl_pin SCL pin number.
  * @param[in] sda_pin SDA pin number.
  */
-NRF_STATIC_INLINE void nrf_twim_pins_set(NRF_TWIM_Type * p_reg,
-                                         uint32_t        scl_pin,
-                                         uint32_t        sda_pin);
+__STATIC_INLINE void nrf_twim_pins_set(NRF_TWIM_Type * p_reg,
+                                       uint32_t scl_pin,
+                                       uint32_t sda_pin);
 
 /**
  * @brief Function for setting the TWI master clock frequency.
  *
- * @param[in] p_reg     Pointer to the structure of registers of the peripheral.
+ * @param[in] p_reg    Pointer to the peripheral registers structure.
  * @param[in] frequency TWI frequency.
  */
-NRF_STATIC_INLINE void nrf_twim_frequency_set(NRF_TWIM_Type *      p_reg,
-                                              nrf_twim_frequency_t frequency);
+__STATIC_INLINE void nrf_twim_frequency_set(NRF_TWIM_Type * p_reg,
+                                            nrf_twim_frequency_t frequency);
 
 /**
  * @brief Function for checking the TWI error source.
  *
  * The error flags are cleared after reading.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
+ * @param[in] p_reg Pointer to the peripheral registers structure.
  *
  * @return Mask with error source flags.
  */
-NRF_STATIC_INLINE uint32_t nrf_twim_errorsrc_get_and_clear(NRF_TWIM_Type * p_reg);
+__STATIC_INLINE uint32_t nrf_twim_errorsrc_get_and_clear(NRF_TWIM_Type * p_reg);
 
 /**
  * @brief Function for setting the address to be used in TWI transfers.
  *
- * @param[in] p_reg   Pointer to the structure of registers of the peripheral.
+ * @param[in] p_reg  Pointer to the peripheral registers structure.
  * @param[in] address Address to be used in transfers.
  */
-NRF_STATIC_INLINE void nrf_twim_address_set(NRF_TWIM_Type * p_reg,
-                                            uint8_t         address);
+__STATIC_INLINE void nrf_twim_address_set(NRF_TWIM_Type * p_reg,
+                                          uint8_t address);
 
 /**
  * @brief Function for setting the transmit buffer.
  *
- * @param[in] p_reg    Pointer to the structure of registers of the peripheral.
- * @param[in] p_buffer Pointer to the buffer with data to send.
- * @param[in] length   Maximum number of data bytes to transmit.
+ * @param[in]  p_reg   Pointer to the peripheral registers structure.
+ * @param[in]  p_buffer Pointer to the buffer with data to send.
+ * @param[in]  length   Maximum number of data bytes to transmit.
  */
-NRF_STATIC_INLINE void nrf_twim_tx_buffer_set(NRF_TWIM_Type * p_reg,
-                                              uint8_t const * p_buffer,
-                                              size_t          length);
+__STATIC_INLINE void nrf_twim_tx_buffer_set(NRF_TWIM_Type * p_reg,
+                                            uint8_t const * p_buffer,
+                                            size_t          length);
 
 /**
  * @brief Function for setting the receive buffer.
  *
- * @param[in] p_reg    Pointer to the structure of registers of the peripheral.
+ * @param[in] p_reg   Pointer to the peripheral registers structure.
  * @param[in] p_buffer Pointer to the buffer for received data.
  * @param[in] length   Maximum number of data bytes to receive.
  */
-NRF_STATIC_INLINE void nrf_twim_rx_buffer_set(NRF_TWIM_Type * p_reg,
-                                              uint8_t *       p_buffer,
-                                              size_t          length);
+__STATIC_INLINE void nrf_twim_rx_buffer_set(NRF_TWIM_Type * p_reg,
+                                            uint8_t * p_buffer,
+                                            size_t    length);
 
-/**
- * @brief Function for setting the specified shortcuts.
- *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] mask  Shortcuts to be set.
- */
-NRF_STATIC_INLINE void nrf_twim_shorts_set(NRF_TWIM_Type * p_reg,
-                                           uint32_t        mask);
+__STATIC_INLINE void nrf_twim_shorts_set(NRF_TWIM_Type * p_reg,
+                                         uint32_t shorts_mask);
 
-/**
- * @brief Function for getting the shortcut setting.
- *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
- * @return Current shortcut configuration.
- */
-NRF_STATIC_INLINE uint32_t nrf_twim_shorts_get(NRF_TWIM_Type const * p_reg);
+__STATIC_INLINE size_t nrf_twim_txd_amount_get(NRF_TWIM_Type * p_reg);
 
-/**
- * @brief Function for getting the amount of transmitted bytes.
- *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
- * @return Amount of transmitted bytes.
- */
-NRF_STATIC_INLINE size_t nrf_twim_txd_amount_get(NRF_TWIM_Type const * p_reg);
-
-/**
- * @brief Function for getting the amount of received bytes.
- *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
- * @return Amount of received bytes.
- */
-NRF_STATIC_INLINE size_t nrf_twim_rxd_amount_get(NRF_TWIM_Type const * p_reg);
+__STATIC_INLINE size_t nrf_twim_rxd_amount_get(NRF_TWIM_Type * p_reg);
 
 /**
  * @brief Function for enabling the TX list feature.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
+ * @param[in] p_reg Pointer to the peripheral registers structure.
  */
-NRF_STATIC_INLINE void nrf_twim_tx_list_enable(NRF_TWIM_Type * p_reg);
+__STATIC_INLINE void nrf_twim_tx_list_enable(NRF_TWIM_Type * p_reg);
 
 /**
  * @brief Function for disabling the TX list feature.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
+ * @param[in] p_reg Pointer to the peripheral registers structure.
  */
-NRF_STATIC_INLINE void nrf_twim_tx_list_disable(NRF_TWIM_Type * p_reg);
+__STATIC_INLINE void nrf_twim_tx_list_disable(NRF_TWIM_Type * p_reg);
 
 /**
  * @brief Function for enabling the RX list feature.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
+ * @param[in] p_reg Pointer to the peripheral registers structure.
  */
-NRF_STATIC_INLINE void nrf_twim_rx_list_enable(NRF_TWIM_Type * p_reg);
+__STATIC_INLINE void nrf_twim_rx_list_enable(NRF_TWIM_Type * p_reg);
 
 /**
  * @brief Function for disabling the RX list feature.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
+ * @param[in] p_reg Pointer to the peripheral registers structure.
  */
-NRF_STATIC_INLINE void nrf_twim_rx_list_disable(NRF_TWIM_Type * p_reg);
+__STATIC_INLINE void nrf_twim_rx_list_disable(NRF_TWIM_Type * p_reg);
 
+#ifndef SUPPRESS_INLINE_IMPLEMENTATION
 
-#ifndef NRF_DECLARE_ONLY
-
-NRF_STATIC_INLINE void nrf_twim_task_trigger(NRF_TWIM_Type * p_reg,
-                                             nrf_twim_task_t task)
+__STATIC_INLINE void nrf_twim_task_trigger(NRF_TWIM_Type * p_reg,
+                                           nrf_twim_task_t task)
 {
     *((volatile uint32_t *)((uint8_t *)p_reg + (uint32_t)task)) = 0x1UL;
 }
 
-NRF_STATIC_INLINE uint32_t nrf_twim_task_address_get(NRF_TWIM_Type const * p_reg,
-                                                     nrf_twim_task_t       task)
+__STATIC_INLINE uint32_t * nrf_twim_task_address_get(NRF_TWIM_Type * p_reg,
+                                                     nrf_twim_task_t task)
 {
-    return (uint32_t)((uint8_t *)p_reg + (uint32_t)task);
+    return (uint32_t *)((uint8_t *)p_reg + (uint32_t)task);
 }
 
-NRF_STATIC_INLINE void nrf_twim_event_clear(NRF_TWIM_Type * p_reg,
-                                            nrf_twim_event_t event)
+__STATIC_INLINE void nrf_twim_event_clear(NRF_TWIM_Type * p_reg,
+                                          nrf_twim_event_t event)
 {
     *((volatile uint32_t *)((uint8_t *)p_reg + (uint32_t)event)) = 0x0UL;
 #if __CORTEX_M == 0x04
@@ -432,102 +415,103 @@ NRF_STATIC_INLINE void nrf_twim_event_clear(NRF_TWIM_Type * p_reg,
 #endif
 }
 
-NRF_STATIC_INLINE bool nrf_twim_event_check(NRF_TWIM_Type const * p_reg,
-                                            nrf_twim_event_t      event)
+__STATIC_INLINE bool nrf_twim_event_check(NRF_TWIM_Type * p_reg,
+                                          nrf_twim_event_t event)
 {
     return (bool)*(volatile uint32_t *)((uint8_t *)p_reg + (uint32_t)event);
 }
 
-NRF_STATIC_INLINE uint32_t nrf_twim_event_address_get(NRF_TWIM_Type const * p_reg,
-                                                      nrf_twim_event_t      event)
+__STATIC_INLINE uint32_t * nrf_twim_event_address_get(NRF_TWIM_Type  * p_reg,
+                                                      nrf_twim_event_t event)
 {
-    return (uint32_t)((uint8_t *)p_reg + (uint32_t)event);
+    return (uint32_t *)((uint8_t *)p_reg + (uint32_t)event);
 }
 
-NRF_STATIC_INLINE void nrf_twim_shorts_enable(NRF_TWIM_Type * p_reg,
-                                              uint32_t mask)
+__STATIC_INLINE void nrf_twim_shorts_enable(NRF_TWIM_Type * p_reg,
+                                            uint32_t shorts_mask)
 {
-    p_reg->SHORTS |= mask;
+    p_reg->SHORTS |= shorts_mask;
 }
 
-NRF_STATIC_INLINE void nrf_twim_shorts_disable(NRF_TWIM_Type * p_reg,
-                                               uint32_t mask)
+__STATIC_INLINE void nrf_twim_shorts_disable(NRF_TWIM_Type * p_reg,
+                                             uint32_t shorts_mask)
 {
-    p_reg->SHORTS &= ~(mask);
+    p_reg->SHORTS &= ~(shorts_mask);
 }
 
-NRF_STATIC_INLINE void nrf_twim_int_enable(NRF_TWIM_Type * p_reg,
-                                           uint32_t mask)
+__STATIC_INLINE void nrf_twim_int_enable(NRF_TWIM_Type * p_reg,
+                                         uint32_t int_mask)
 {
-    p_reg->INTENSET = mask;
+    p_reg->INTENSET = int_mask;
 }
 
-NRF_STATIC_INLINE void nrf_twim_int_disable(NRF_TWIM_Type * p_reg,
-                                            uint32_t mask)
+__STATIC_INLINE void nrf_twim_int_disable(NRF_TWIM_Type * p_reg,
+                                          uint32_t int_mask)
 {
-    p_reg->INTENCLR = mask;
+    p_reg->INTENCLR = int_mask;
 }
 
-NRF_STATIC_INLINE uint32_t nrf_twim_int_enable_check(NRF_TWIM_Type const * p_reg, uint32_t mask)
+__STATIC_INLINE bool nrf_twim_int_enable_check(NRF_TWIM_Type * p_reg,
+                                               nrf_twim_int_mask_t int_mask)
 {
-    return p_reg->INTENSET & mask;
+    return (bool)(p_reg->INTENSET & int_mask);
 }
 
 #if defined(DPPI_PRESENT)
-NRF_STATIC_INLINE void nrf_twim_subscribe_set(NRF_TWIM_Type * p_reg,
-                                              nrf_twim_task_t task,
-                                              uint8_t        channel)
+__STATIC_INLINE void nrf_twim_subscribe_set(NRF_TWIM_Type * p_reg,
+                                            nrf_twim_task_t task,
+                                            uint8_t        channel)
 {
     *((volatile uint32_t *) ((uint8_t *) p_reg + (uint32_t) task + 0x80uL)) =
             ((uint32_t)channel | TWIM_SUBSCRIBE_STARTRX_EN_Msk);
 }
 
-NRF_STATIC_INLINE void nrf_twim_subscribe_clear(NRF_TWIM_Type * p_reg,
-                                                nrf_twim_task_t task)
+__STATIC_INLINE void nrf_twim_subscribe_clear(NRF_TWIM_Type * p_reg,
+                                              nrf_twim_task_t task)
 {
     *((volatile uint32_t *) ((uint8_t *) p_reg + (uint32_t) task + 0x80uL)) = 0;
 }
 
-NRF_STATIC_INLINE void nrf_twim_publish_set(NRF_TWIM_Type *  p_reg,
-                                            nrf_twim_event_t event,
-                                            uint8_t         channel)
+__STATIC_INLINE void nrf_twim_publish_set(NRF_TWIM_Type *  p_reg,
+                                          nrf_twim_event_t event,
+                                          uint8_t         channel)
 {
     *((volatile uint32_t *) ((uint8_t *) p_reg + (uint32_t) event + 0x80uL)) =
             ((uint32_t)channel | TWIM_PUBLISH_STOPPED_EN_Msk);
 }
 
-NRF_STATIC_INLINE void nrf_twim_publish_clear(NRF_TWIM_Type *  p_reg,
-                                              nrf_twim_event_t event)
+__STATIC_INLINE void nrf_twim_publish_clear(NRF_TWIM_Type *  p_reg,
+                                            nrf_twim_event_t event)
 {
     *((volatile uint32_t *) ((uint8_t *) p_reg + (uint32_t) event + 0x80uL)) = 0;
 }
 #endif // defined(DPPI_PRESENT)
 
-NRF_STATIC_INLINE void nrf_twim_enable(NRF_TWIM_Type * p_reg)
+__STATIC_INLINE void nrf_twim_enable(NRF_TWIM_Type * p_reg)
 {
     p_reg->ENABLE = (TWIM_ENABLE_ENABLE_Enabled << TWIM_ENABLE_ENABLE_Pos);
 }
 
-NRF_STATIC_INLINE void nrf_twim_disable(NRF_TWIM_Type * p_reg)
+__STATIC_INLINE void nrf_twim_disable(NRF_TWIM_Type * p_reg)
 {
     p_reg->ENABLE = (TWIM_ENABLE_ENABLE_Disabled << TWIM_ENABLE_ENABLE_Pos);
 }
 
-NRF_STATIC_INLINE void nrf_twim_pins_set(NRF_TWIM_Type * p_reg,
-                                         uint32_t scl_pin,
-                                         uint32_t sda_pin)
+__STATIC_INLINE void nrf_twim_pins_set(NRF_TWIM_Type * p_reg,
+                                       uint32_t scl_pin,
+                                       uint32_t sda_pin)
 {
     p_reg->PSEL.SCL = scl_pin;
     p_reg->PSEL.SDA = sda_pin;
 }
 
-NRF_STATIC_INLINE void nrf_twim_frequency_set(NRF_TWIM_Type * p_reg,
-                                              nrf_twim_frequency_t frequency)
+__STATIC_INLINE void nrf_twim_frequency_set(NRF_TWIM_Type * p_reg,
+                                            nrf_twim_frequency_t frequency)
 {
     p_reg->FREQUENCY = frequency;
 }
 
-NRF_STATIC_INLINE uint32_t nrf_twim_errorsrc_get_and_clear(NRF_TWIM_Type * p_reg)
+__STATIC_INLINE uint32_t nrf_twim_errorsrc_get_and_clear(NRF_TWIM_Type * p_reg)
 {
     uint32_t error_source = p_reg->ERRORSRC;
 
@@ -537,69 +521,64 @@ NRF_STATIC_INLINE uint32_t nrf_twim_errorsrc_get_and_clear(NRF_TWIM_Type * p_reg
     return error_source;
 }
 
-NRF_STATIC_INLINE void nrf_twim_address_set(NRF_TWIM_Type * p_reg,
-                                            uint8_t address)
+__STATIC_INLINE void nrf_twim_address_set(NRF_TWIM_Type * p_reg,
+                                          uint8_t address)
 {
     p_reg->ADDRESS = address;
 }
 
-NRF_STATIC_INLINE void nrf_twim_tx_buffer_set(NRF_TWIM_Type * p_reg,
-                                              uint8_t const * p_buffer,
-                                              size_t          length)
+__STATIC_INLINE void nrf_twim_tx_buffer_set(NRF_TWIM_Type * p_reg,
+                                            uint8_t const * p_buffer,
+                                            size_t          length)
 {
     p_reg->TXD.PTR    = (uint32_t)p_buffer;
     p_reg->TXD.MAXCNT = length;
 }
 
-NRF_STATIC_INLINE void nrf_twim_rx_buffer_set(NRF_TWIM_Type * p_reg,
-                                              uint8_t * p_buffer,
-                                              size_t    length)
+__STATIC_INLINE void nrf_twim_rx_buffer_set(NRF_TWIM_Type * p_reg,
+                                            uint8_t * p_buffer,
+                                            size_t    length)
 {
     p_reg->RXD.PTR    = (uint32_t)p_buffer;
     p_reg->RXD.MAXCNT = length;
 }
 
-NRF_STATIC_INLINE void nrf_twim_shorts_set(NRF_TWIM_Type * p_reg,
-                                           uint32_t mask)
+__STATIC_INLINE void nrf_twim_shorts_set(NRF_TWIM_Type * p_reg,
+                                         uint32_t shorts_mask)
 {
-    p_reg->SHORTS = mask;
+    p_reg->SHORTS = shorts_mask;
 }
 
-NRF_STATIC_INLINE uint32_t nrf_twim_shorts_get(NRF_TWIM_Type const * p_reg)
-{
-    return p_reg->SHORTS;
-}
-
-NRF_STATIC_INLINE size_t nrf_twim_txd_amount_get(NRF_TWIM_Type const * p_reg)
+__STATIC_INLINE size_t nrf_twim_txd_amount_get(NRF_TWIM_Type * p_reg)
 {
     return p_reg->TXD.AMOUNT;
 }
 
-NRF_STATIC_INLINE size_t nrf_twim_rxd_amount_get(NRF_TWIM_Type const * p_reg)
+__STATIC_INLINE size_t nrf_twim_rxd_amount_get(NRF_TWIM_Type * p_reg)
 {
     return p_reg->RXD.AMOUNT;
 }
 
-NRF_STATIC_INLINE void nrf_twim_tx_list_enable(NRF_TWIM_Type * p_reg)
+__STATIC_INLINE void nrf_twim_tx_list_enable(NRF_TWIM_Type * p_reg)
 {
-    p_reg->TXD.LIST = TWIM_TXD_LIST_LIST_ArrayList << TWIM_TXD_LIST_LIST_Pos;
+    p_reg->TXD.LIST = 1;
 }
 
-NRF_STATIC_INLINE void nrf_twim_tx_list_disable(NRF_TWIM_Type * p_reg)
+__STATIC_INLINE void nrf_twim_tx_list_disable(NRF_TWIM_Type * p_reg)
 {
-    p_reg->TXD.LIST = TWIM_TXD_LIST_LIST_Disabled << TWIM_TXD_LIST_LIST_Pos;
+    p_reg->TXD.LIST = 0;
 }
 
-NRF_STATIC_INLINE void nrf_twim_rx_list_enable(NRF_TWIM_Type * p_reg)
+__STATIC_INLINE void nrf_twim_rx_list_enable(NRF_TWIM_Type * p_reg)
 {
-    p_reg->RXD.LIST = TWIM_RXD_LIST_LIST_ArrayList << TWIM_RXD_LIST_LIST_Pos;
+    p_reg->RXD.LIST = 1;
 }
 
-NRF_STATIC_INLINE void nrf_twim_rx_list_disable(NRF_TWIM_Type * p_reg)
+__STATIC_INLINE void nrf_twim_rx_list_disable(NRF_TWIM_Type * p_reg)
 {
-    p_reg->RXD.LIST = TWIM_RXD_LIST_LIST_Disabled << TWIM_RXD_LIST_LIST_Pos;
+    p_reg->RXD.LIST = 0;
 }
-#endif // NRF_DECLARE_ONLY
+#endif // SUPPRESS_INLINE_IMPLEMENTATION
 
 /** @} */
 

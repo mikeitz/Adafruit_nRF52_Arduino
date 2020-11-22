@@ -2,9 +2,6 @@
 *.o
 *.obj
 
-# Visual Studio Code
-**/.vscode/
-
 # Executables
 *.out
 *.app
@@ -19,7 +16,3 @@
 
 # Allow compiled nordic sdk object files.
 !/cores/**/*.o
-
-# Ignore local overrides of platform.txt and boards.txt,
-/boards.local.txt
-/platform.local.txt

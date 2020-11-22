@@ -67,6 +67,7 @@ const uint32_t g_ADigitalPinMap[] = {
   29, // A5
   30, // A6
   31, // A7
+
 };
 
 void initVariant()

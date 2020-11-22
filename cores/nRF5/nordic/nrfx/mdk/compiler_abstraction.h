@@ -57,10 +57,6 @@ POSSIBILITY OF SUCH DAMAGE.
         #define __PACKED            __packed
     #endif
 
-    #ifndef __UNUSED
-        #define __UNUSED            __attribute__((unused))
-    #endif
-
     #define GET_SP()                __current_sp()
     
 #elif defined (__ARMCC_VERSION) && (__ARMCC_VERSION >= 6010050)
@@ -83,10 +79,6 @@ POSSIBILITY OF SUCH DAMAGE.
 
     #ifndef __PACKED
         #define __PACKED            __attribute__((packed, aligned(1)))
-    #endif
-
-    #ifndef __UNUSED
-        #define __UNUSED            __attribute__((unused))
     #endif
 
     #define GET_SP()                __current_sp()
@@ -113,10 +105,6 @@ POSSIBILITY OF SUCH DAMAGE.
     #ifndef __PACKED
         #define __PACKED            __packed
     #endif
-
-    #ifndef __UNUSED
-        #define __UNUSED
-    #endif
     
     #define GET_SP()                __get_SP()
 
@@ -140,10 +128,6 @@ POSSIBILITY OF SUCH DAMAGE.
 
     #ifndef __PACKED
         #define __PACKED           __attribute__((packed)) 
-    #endif
-
-    #ifndef __UNUSED
-        #define __UNUSED            __attribute__((unused))
     #endif
 
     #define GET_SP()                gcc_current_sp()
@@ -175,10 +159,6 @@ POSSIBILITY OF SUCH DAMAGE.
     /* Not defined for TASKING. */
     #ifndef __PACKED
         #define __PACKED
-    #endif
-
-    #ifndef __UNUSED
-        #define __UNUSED            __attribute__((unused))
     #endif
 
     #define GET_SP()                __get_MSP()

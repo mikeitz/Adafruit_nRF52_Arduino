@@ -36,24 +36,27 @@
 void flash_nrf5x_flush (void);
 bool flash_nrf5x_erase(uint32_t addr);
 
-int flash_nrf5x_write (uint32_t dst, void const * src, uint32_t len);
-int flash_nrf5x_read (void* dst, uint32_t src, uint32_t len);
+uint32_t flash_nrf5x_write (uint32_t dst, void const * src, uint32_t len);
+uint32_t flash_nrf5x_read (void* dst, uint32_t src, uint32_t len);
 
 //--------------------------------------------------------------------+
 // Write helper
 //--------------------------------------------------------------------+
-static inline int flash_nrf5x_write8 (uint32_t dst, uint8_t num)
+static inline uint32_t flash_nrf5x_write8 (uint32_t dst, uint8_t num)
 {
-  return flash_nrf5x_write(dst, &num, sizeof(num));
+  flash_nrf5x_write(dst, &num, sizeof(num));
+  return sizeof(num);
 }
 
-static inline int flash_nrf5x_write16 (uint32_t dst, uint8_t num)
+static inline uint32_t flash_nrf5x_write16 (uint32_t dst, uint8_t num)
 {
-  return flash_nrf5x_write(dst, &num, sizeof(num));
+  flash_nrf5x_write(dst, &num, sizeof(num));
+  return sizeof(num);
 }
-static inline int flash_nrf5x_write32 (uint32_t dst, uint8_t num)
+static inline uint32_t flash_nrf5x_write32 (uint32_t dst, uint8_t num)
 {
-  return flash_nrf5x_write(dst, &num, sizeof(num));
+  flash_nrf5x_write(dst, &num, sizeof(num));
+  return sizeof(num);
 }
 
 //--------------------------------------------------------------------+

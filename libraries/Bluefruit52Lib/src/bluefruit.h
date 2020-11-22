@@ -36,13 +36,6 @@
 #define BLE_GATT_ATT_MTU_MAX      247
 #define BLE_MAX_CONNECTION        20 // SD support up to 20 connections
 
-// Allocate more memory for GATT table for 840
-#ifdef NRF52840_XXAA
-  #define CFG_SD_ATTR_TABLE_SIZE    0x1000
-#else
-  #define CFG_SD_ATTR_TABLE_SIZE    0xC00
-#endif
-
 #include "BLEUuid.h"
 #include "BLEAdvertising.h"
 #include "BLECharacteristic.h"
@@ -55,7 +48,6 @@
 #include "BLEDiscovery.h"
 #include "BLEConnection.h"
 #include "BLEGatt.h"
-#include "BLESecurity.h"
 
 // Services
 #include "services/BLEDis.h"
@@ -101,22 +93,20 @@ extern "C"
 class AdafruitBluefruit
 {
   public:
-    typedef void (*event_cb_t) (ble_evt_t* evt);
-    typedef void (*rssi_cb_t) (uint16_t conn_hdl, int8_t rssi);
+    typedef void (*rssi_callback_t) (uint16_t conn_hdl, int8_t rssi);
 
-    AdafruitBluefruit(void);
+    AdafruitBluefruit(void); // Constructor
 
     /*------------------------------------------------------------------*/
     /* Lower Level Classes (Bluefruit.Advertising.*, etc.)
      *------------------------------------------------------------------*/
-    BLEPeriph          Periph;
-    BLECentral         Central;
-    BLESecurity        Security;
     BLEGatt            Gatt;
 
     BLEAdvertising     Advertising;
     BLEAdvertisingData ScanResponse;
     BLEScanner         Scanner;
+    BLEPeriph          Periph;
+    BLECentral         Central;
     BLEDiscovery       Discovery;
 
     /*------------------------------------------------------------------*/
@@ -154,8 +144,15 @@ class AdafruitBluefruit
     bool     setAppearance      (uint16_t appear);
     uint16_t getAppearance      (void);
 
+    ble_gap_sec_params_t getSecureParam(void)
+    {
+      return _sec_param;
+    }
+
     void     autoConnLed        (bool enabled);
     void     setConnLedInterval (uint32_t ms);
+
+    void     clearBonds        (void);
 
     /*------------------------------------------------------------------*/
     /* GAP, Connections and Bonding
@@ -164,30 +161,23 @@ class AdafruitBluefruit
     bool     connected         (uint16_t conn_hdl);
 
     uint16_t connHandle        (void);
+    bool     connPaired        (uint16_t conn_hdl);
 
     // Alias to BLEConnection API()
     bool     disconnect        (uint16_t conn_hdl);
+    bool     requestPairing    (uint16_t conn_hdl);
 
     uint16_t getMaxMtu(uint8_t role);
 
     BLEConnection* Connection(uint16_t conn_hdl);
 
-#ifdef ANT_LICENSE_KEY
-    /*------------------------------------------------------------------*
-     * Optional semaphore for additional event handlers for SD event.
-     * It can be used for handling non-BLE  SD events 
-     *------------------------------------------------------------------*/
-    void setMultiprotocolSemaphore(SemaphoreHandle_t* p_mprot_event_semaphore) 
-    { 
-        _mprot_event_sem= p_mprot_event_semaphore;
-    } 
-#endif
-
     /*------------------------------------------------------------------*/
     /* Callbacks
      *------------------------------------------------------------------*/
-    void setRssiCallback(rssi_cb_t fp);
-    void setEventCallback(event_cb_t fp);
+    void setRssiCallback(rssi_callback_t fp);
+    void setEventCallback( void (*fp) (ble_evt_t*) );
+
+    COMMENT_OUT ( bool setPIN(const char* pin); )
 
     /*------------------------------------------------------------------*/
     /* INTERNAL USAGE ONLY
@@ -225,14 +215,7 @@ class AdafruitBluefruit
 
     SemaphoreHandle_t _ble_event_sem;
     SemaphoreHandle_t _soc_event_sem;
-#ifdef ANT_LICENSE_KEY
-    /* Optional semaphore for additional event handlers for SD event.
-     * It can be used for handling non-BLE  SD events 
-     */
-    SemaphoreHandle_t* _mprot_event_sem;
-#endif
 
-    // Auto LED Blinky
     TimerHandle_t _led_blink_th;
     bool _led_conn;
 
@@ -240,9 +223,13 @@ class AdafruitBluefruit
 
     BLEConnection* _connection[BLE_MAX_CONNECTION];
 
-    //------------- Callbacks -------------//
-    rssi_cb_t _rssi_cb;
-    event_cb_t _event_cb;
+    rssi_callback_t _rssi_cb;
+    void (*_event_cb) (ble_evt_t*);
+
+COMMENT_OUT(
+    uint8_t _auth_type;
+    char _pin[BLE_GAP_PASSKEY_LEN];
+)
 
     /*------------------------------------------------------------------*/
     /* INTERNAL USAGE ONLY

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 - 2020, Nordic Semiconductor ASA
+ * Copyright (c) 2018 - 2019, Nordic Semiconductor ASA
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -59,36 +59,36 @@
 #elif defined(NRF52810_XXAA) || defined(NRF52811_XXAA)
     #define NRFX_DELAY_CPU_FREQ_MHZ 64
     #define NRFX_DELAY_DWT_PRESENT  0
-#elif defined(NRF52832_XXAA) || defined(NRF52832_XXAB) || \
-      defined(NRF52833_XXAA) || defined(NRF52840_XXAA) || \
-      defined(NRF9160_XXAA)
+#elif defined(NRF52832_XXAA) || defined (NRF52832_XXAB)
     #define NRFX_DELAY_CPU_FREQ_MHZ 64
     #define NRFX_DELAY_DWT_PRESENT  1
-#elif defined(NRF5340_XXAA_APPLICATION)
-    #define NRFX_DELAY_CPU_FREQ_MHZ (SystemCoreClock / 1000000)
+#elif defined(NRF52840_XXAA)
+    #define NRFX_DELAY_CPU_FREQ_MHZ 64
     #define NRFX_DELAY_DWT_PRESENT  1
-#elif defined(NRF5340_XXAA_NETWORK)
+#elif defined(NRF9160_XXAA)
     #define NRFX_DELAY_CPU_FREQ_MHZ 64
     #define NRFX_DELAY_DWT_PRESENT  1
 #else
-    #define NRFX_DELAY_CPU_FREQ_MHZ (SystemCoreClock / 1000000)
-    #define NRFX_DELAY_DWT_PRESENT  0
+    #error "Unknown device."
 #endif
 
 /**
  * @brief Function for delaying execution for a number of microseconds.
  *
- * The value of @p time_us is multiplied by the CPU frequency in MHz. Therefore, the delay
- * is limited to the maximum value of the uint32_t type divided by the frequency.
+ * The value of @p time_us is multiplied by the frequency in MHz. Therefore, the delay is limited to
+ * maximum uint32_t capacity divided by frequency. For example:
+ * - For SoCs working at 64MHz: 0xFFFFFFFF/64 = 0x03FFFFFF (67108863 microseconds)
+ * - For SoCs working at 16MHz: 0xFFFFFFFF/16 = 0x0FFFFFFF (268435455 microseconds)
+ *
  * @sa NRFX_COREDEP_DELAY_US_LOOP_CYCLES
  *
  * @param time_us Number of microseconds to wait.
  */
-NRF_STATIC_INLINE void nrfx_coredep_delay_us(uint32_t time_us);
+__STATIC_INLINE void nrfx_coredep_delay_us(uint32_t time_us);
 
 /** @} */
 
-#ifndef NRF_DECLARE_ONLY
+#ifndef SUPPRESS_INLINE_IMPLEMENTATION
 
 #if NRFX_CHECK(NRFX_DELAY_DWT_BASED)
 
@@ -96,7 +96,7 @@ NRF_STATIC_INLINE void nrfx_coredep_delay_us(uint32_t time_us);
 #error "DWT unit not present in the SoC that is used."
 #endif
 
-NRF_STATIC_INLINE void nrfx_coredep_delay_us(uint32_t time_us)
+__STATIC_INLINE void nrfx_coredep_delay_us(uint32_t time_us)
 {
     if (time_us == 0)
     {
@@ -125,10 +125,10 @@ NRF_STATIC_INLINE void nrfx_coredep_delay_us(uint32_t time_us)
     DWT->CTRL = dwt_ctrl;
     CoreDebug->DEMCR = core_debug;
 }
-
 #else // NRFX_CHECK(NRFX_DELAY_DWT_BASED)
 
-NRF_STATIC_INLINE void nrfx_coredep_delay_us(uint32_t time_us)
+
+__STATIC_INLINE void nrfx_coredep_delay_us(uint32_t time_us)
 {
     if (time_us == 0)
     {
@@ -170,6 +170,6 @@ NRF_STATIC_INLINE void nrfx_coredep_delay_us(uint32_t time_us)
 
 #endif // !NRFX_CHECK(NRFX_DELAY_DWT_BASED_DELAY)
 
-#endif // NRF_DECLARE_ONLY
+#endif // SUPPRESS_INLINE_IMPLEMENTATION
 
 #endif // NRFX_COREDEP_H__

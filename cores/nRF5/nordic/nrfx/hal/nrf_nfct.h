@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018 - 2020, Nordic Semiconductor ASA
+ * Copyright (c) 2018 - 2019, Nordic Semiconductor ASA
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -50,14 +50,9 @@ extern "C" {
 #define NRF_NFCT_DISABLE_ALL_INT 0xFFFFFFFF /**< Value to disable all interrupts. */
 
 /**
- * @brief This value can be used as a parameter for the @ref nrf_nfct_mod_ctrl_pin_set
- *        function to specify that a given NFCT signal (MODULATION CONTROL)
- *        must not be connected to a physical pin.
+ * @brief NFCT tasks
  */
-#define NRF_NFCT_MOD_CTRL_PIN_NOT_CONNECTED  0xFFFFFFFF
-
-/** @brief NFCT tasks. */
-typedef enum
+typedef enum /*lint -save -e30 */
 {
     NRF_NFCT_TASK_ACTIVATE     = offsetof(NRF_NFCT_Type, TASKS_ACTIVATE),     /**< Activate the NFCT peripheral for the incoming and outgoing frames, change state to activated. */
     NRF_NFCT_TASK_DISABLE      = offsetof(NRF_NFCT_Type, TASKS_DISABLE),      /**< Disable the NFCT peripheral. */
@@ -66,10 +61,12 @@ typedef enum
     NRF_NFCT_TASK_ENABLERXDATA = offsetof(NRF_NFCT_Type, TASKS_ENABLERXDATA), /**< Initialize EasyDMA for receive. */
     NRF_NFCT_TASK_GOIDLE       = offsetof(NRF_NFCT_Type, TASKS_GOIDLE),       /**< Force state machine to the IDLE state. */
     NRF_NFCT_TASK_GOSLEEP      = offsetof(NRF_NFCT_Type, TASKS_GOSLEEP),      /**< Force state machine to the SLEEP_A state. */
-} nrf_nfct_task_t;
+} nrf_nfct_task_t; /*lint -restore */
 
-/** @brief NFCT events. */
-typedef enum
+/**
+ * @brief NFCT events
+ */
+typedef enum /*lint -save -e30 */
 {
     NRF_NFCT_EVENT_READY             = offsetof(NRF_NFCT_Type, EVENTS_READY),             /**< The NFCT peripheral is ready to receive and send frames. */
     NRF_NFCT_EVENT_FIELDDETECTED     = offsetof(NRF_NFCT_Type, EVENTS_FIELDDETECTED),     /**< Remote NFC field is detected. */
@@ -86,9 +83,11 @@ typedef enum
     NRF_NFCT_EVENT_COLLISION         = offsetof(NRF_NFCT_Type, EVENTS_COLLISION),         /**< NFC auto collision resolution error reported. */
     NRF_NFCT_EVENT_SELECTED          = offsetof(NRF_NFCT_Type, EVENTS_SELECTED),          /**< NFC auto collision resolution successfully completed. */
     NRF_NFCT_EVENT_STARTED           = offsetof(NRF_NFCT_Type, EVENTS_STARTED),           /**< EasyDMA is ready to receive or send frames. */
-} nrf_nfct_event_t;
+} nrf_nfct_event_t; /*lint -restore */
 
-/** @brief NFCT shortcuts. */
+/**
+ * @brief NFCT shorts
+ */
 typedef enum
 {
     NRF_NFCT_SHORT_FIELDDETECTED_ACTIVATE_MASK  = NFCT_SHORTS_FIELDDETECTED_ACTIVATE_Msk,  /**< Shortcut between the FIELDDETECTED event and the ACTIVATE task. */
@@ -98,7 +97,9 @@ typedef enum
 #endif // defined(NFCT_SHORTS_TXFRAMEEND_ENABLERXDATA_Msk) || defined(__NRFX_DOXYGEN__)
 } nrf_nfct_short_mask_t;
 
-/** @brief NFCT interrupts. */
+/**
+ * @brief NFCT interrupts
+ */
 typedef enum
 {
     NRF_NFCT_INT_READY_MASK             = NFCT_INTEN_READY_Msk,             /**< Interrupt on READY event. */
@@ -118,7 +119,9 @@ typedef enum
     NRF_NFCT_INT_STARTED_MASK           = NFCT_INTEN_STARTED_Msk,           /**< Interrupt on STARTED event. */
 } nrf_nfct_int_mask_t;
 
-/** @brief NFC error status bit masks. */
+/**
+ * @brief NFC error status bit masks.
+ */
 typedef enum
 {
     NRF_NFCT_ERROR_FRAMEDELAYTIMEOUT_MASK = NFCT_ERRORSTATUS_FRAMEDELAYTIMEOUT_Msk, /**< Timeout of the Frame Delay Timer (no frame transmission started in the FDT window). */
@@ -130,7 +133,9 @@ typedef enum
 #endif // defined(NFCT_ERRORSTATUS_NFCFIELDTOOWEAK_Msk) || defined(__NRFX_DOXYGEN__)
 } nrf_nfct_error_status_t;
 
-/** @brief NFC received frame status bit masks. */
+/**
+ * @brief NFC received frame status bit masks.
+ */
 typedef enum
 {
     NRF_NFCT_RX_FRAME_STATUS_CRC_MASK     = NFCT_FRAMESTATUS_RX_CRCERROR_Msk,     /**< CRC status mask. */
@@ -139,7 +144,9 @@ typedef enum
 } nrf_nfct_rx_frame_status_t;
 
 #if defined(NFCT_NFCTAGSTATE_NFCTAGSTATE_Msk) || defined(__NRFX_DOXYGEN__)
-/** @brief NFC tag state. */
+/**
+ * @brief NFC tag state.
+ */
 typedef enum
 {
     NRF_NFCT_TAG_STATE_DISABLED    = NFCT_NFCTAGSTATE_NFCTAGSTATE_Disabled,   /**< Disabled or sensing NFC field. */
@@ -165,14 +172,18 @@ typedef enum
 } nrf_nfct_sleep_state_t;
 #endif // defined (NFCT_SLEEPSTATE_SLEEPSTATE_Msk) || defined(__NRFX_DOXYGEN__)
 
-/** @brief NFC field state bit masks. */
+/**
+ * @brief NFC field state bit masks.
+ */
 typedef enum
 {
     NRF_NFCT_FIELD_STATE_PRESENT_MASK = NFCT_FIELDPRESENT_FIELDPRESENT_Msk, /**< Field presence mask. */
     NRF_NFCT_FIELD_STATE_LOCK_MASK    = NFCT_FIELDPRESENT_LOCKDETECT_Msk    /**< Field lock mask. */
 } nrf_nfct_field_state_t;
 
-/** @brief NFC frame delay mode for data transmission. */
+/**
+ * @brief NFC frame delay mode for data transmission.
+ */
 typedef enum
 {
     NRF_NFCT_FRAME_DELAY_MODE_FREERUN    = NFCT_FRAMEDELAYMODE_FRAMEDELAYMODE_FreeRun,   /**< Frame transmission starts when @ref NRF_NFCT_TASK_STARTTX is set (delay timer is not used). */
@@ -181,7 +192,9 @@ typedef enum
     NRF_NFCT_FRAME_DELAY_MODE_WINDOWGRID = NFCT_FRAMEDELAYMODE_FRAMEDELAYMODE_WindowGrid /**< Frame transmission starts in a bit grid between FRAMEDELAYMIN and FRAMEDELAYMAX. */
 } nrf_nfct_frame_delay_mode_t;
 
-/** @brief Bit masks for NFC transmission frame configuration. */
+/**
+ * @brief Bit masks for NFC transmission frame configuration.
+ */
 typedef enum
 {
     NRF_NFCT_TX_FRAME_CONFIG_PARITY        = NFCT_TXD_FRAMECONFIG_PARITY_Msk,      /**< Indicates whether parity is added in the transmitted frames. */
@@ -190,7 +203,9 @@ typedef enum
     NRF_NFCT_TX_FRAME_CONFIG_CRC16         = NFCT_TXD_FRAMECONFIG_CRCMODETX_Msk    /**< Indicates whether CRC is added in the transmitted frames. */
 } nrf_nfct_tx_frame_config_t;
 
-/** @brief Bit masks for NFC reception frame configuration. */
+/**
+ * @brief Bit masks for NFC reception frame configuration.
+ */
 typedef enum
 {
     NRF_NFCT_RX_FRAME_CONFIG_PARITY = NFCT_RXD_FRAMECONFIG_PARITY_Msk,   /**< Indicates whether parity is expected in the received frames. */
@@ -199,8 +214,7 @@ typedef enum
 } nrf_nfct_rx_frame_config_t;
 
 /**
- * @brief 'NFCI1 size' NFC field configuration for the SENS_RES frame according to the NFC Forum
- *        Digital Protocol Technical Specification.
+ * @brief 'NFCI1 size' NFC field configuration for the SENS_RES frame according to the NFC Forum Digital Protocol Technical Specification.
  */
 typedef enum
 {
@@ -215,8 +229,7 @@ typedef enum
 } nrf_nfct_sensres_nfcid1_size_t;
 
 /**
- * @brief 'Bit frame SDD' NFC field configuration for the SENS_RES frame according to the NFC
- *         Forum Digital Protocol Technical Specification.
+ * @brief 'Bit frame SDD' NFC field configuration for the SENS_RES frame according to the NFC Forum Digital Protocol Technical Specification.
  */
 typedef enum
 {
@@ -235,8 +248,7 @@ typedef enum
 } nrf_nfct_sensres_bit_frame_sdd_t;
 
 /**
- * @brief 'Platofrm Config' NFC field configuration for the SENS_RES frame according to the NFC
- *        Forum Digital Protocol Technical Specification.
+ * @brief 'Platofrm Config' NFC field configuration for the SENS_RES frame according to the NFC Forum Digital Protocol Technical Specification.
  */
 typedef enum
 {
@@ -246,7 +258,9 @@ typedef enum
     NRF_NFCT_SENSRES_PLATFORM_CONFIG_OTHER = 0 << NFCT_SENSRES_PLATFCONFIG_Pos
 } nrf_nfct_sensres_platform_config_t;
 
-/** @brief Bit masks for SEL_RES NFC frame configuration. */
+/**
+ * @brief Bit masks for SEL_RES NFC frame configuration.
+ */
 typedef enum
 {
     NRF_NFCT_SELRES_CASCADE_MASK  = NFCT_SELRES_CASCADE_Msk,  /**< SEL_RES Cascade field bit mask. */
@@ -254,8 +268,7 @@ typedef enum
 } nrf_nfct_selres_t;
 
 /**
- * @brief Protocol NFC field (bits b7 and b6) configuration for the SEL_RES frame according to
- *        the NFC Forum Digital Protocol Technical Specification.
+ * @brief Protocol NFC field (bits b7 and b6) configuration for the SEL_RES frame according to the NFC Forum Digital Protocol Technical Specification.
  */
 typedef enum
 {
@@ -265,220 +278,138 @@ typedef enum
     NRF_NFCT_SELRES_PROTOCOL_NFCDEP_T4AT = 3,  /**< NFC-DEP Protocol and Type 4A Tag platform). */
 } nrf_nfct_selres_protocol_t;
 
-#if defined(NFCT_MODULATIONCTRL_MODULATIONCTRL_Msk) || defined(__NRFX_DOXYGEN__)
-/** @brief Modulation output configuration. */
-typedef enum
-{
-    NRF_NFCT_MODULATION_CTRL_INVALID       = NFCT_MODULATIONCTRL_MODULATIONCTRL_Invalid,             /**< Invalid configuration. Defaults to the same behavior as NRF_NFCT_MODULATION_CTRL_INTERNAL. */
-    NRF_NFCT_MODULATION_CTRL_INTERNAL      = NFCT_MODULATIONCTRL_MODULATIONCTRL_Internal,            /**< Use internal modulator only. */
-    NRF_NFCT_MODULATION_CTRL_GPIO          = NFCT_MODULATIONCTRL_MODULATIONCTRL_ModToGpio,           /**< Transmit output digital modulation signal to a GPIO pin. */
-    NRF_NFCT_MODULATION_CTRL_INTERNAL_GPIO = NFCT_MODULATIONCTRL_MODULATIONCTRL_InternalAndModToGpio /**< Use internal modulator and transmit output digital modulation signal to a GPIO pin. */
-} nrf_nfct_modulation_ctrl_t;
-#endif // defined(NFCT_MODULATIONCTRL_MODULATIONCTRL_Msk) || defined(__NRFX_DOXYGEN__)
-
 /**
  * @brief Function for activating a specific NFCT task.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] task  Task to be activated.
+ * @param[in] task Task.
  */
-NRF_STATIC_INLINE void nrf_nfct_task_trigger(NRF_NFCT_Type * p_reg, nrf_nfct_task_t task);
+__STATIC_INLINE void nrf_nfct_task_trigger(nrf_nfct_task_t task);
 
 /**
  * @brief Function for returning the address of a specific NFCT task register.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] task  Task.
+ * @param[in] task Task.
  *
  * @return Task address.
  */
-NRF_STATIC_INLINE uint32_t nrf_nfct_task_address_get(NRF_NFCT_Type const * p_reg,
-                                                     nrf_nfct_task_t       task);
+__STATIC_INLINE uint32_t nrf_nfct_task_address_get(nrf_nfct_task_t task);
 
 /**
  * @brief Function for clearing a specific event.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
  * @param[in] event Event.
  */
-NRF_STATIC_INLINE void nrf_nfct_event_clear(NRF_NFCT_Type * p_reg, nrf_nfct_event_t event);
+__STATIC_INLINE void nrf_nfct_event_clear(nrf_nfct_event_t event);
 
 /**
- * @brief Function for retrieving the state of the NFCT event.
+ * @brief Function for returning the state of a specific event.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] event Event to be checked.
+ * @param[in] event Event.
  *
- * @retval true  The event has been generated.
- * @retval false The event has not been generated.
+ * @retval true If the event is set.
+ * @retval false If the event is not set.
  */
-NRF_STATIC_INLINE bool nrf_nfct_event_check(NRF_NFCT_Type const * p_reg, nrf_nfct_event_t event);
+__STATIC_INLINE bool nrf_nfct_event_check(nrf_nfct_event_t event);
 
 /**
  * @brief Function for returning the address of a specific NFCT event register.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
  * @param[in] event Event.
  *
  * @return Address.
  */
-NRF_STATIC_INLINE uint32_t nrf_nfct_event_address_get(NRF_NFCT_Type const * p_reg,
-                                                      nrf_nfct_event_t      event);
+__STATIC_INLINE uint32_t nrf_nfct_event_address_get(nrf_nfct_event_t event);
 
 /**
  * @brief Function for enabling selected shortcuts.
  *
- * @param[in] p_reg      Pointer to the structure of registers of the peripheral.
- * @param[in] short_mask Mask of shortcuts.
+ * @param[in] short_mask Shortcut mask.
  */
-NRF_STATIC_INLINE void nrf_nfct_shorts_enable(NRF_NFCT_Type * p_reg, uint32_t short_mask);
+__STATIC_INLINE void nrf_nfct_shorts_enable(uint32_t short_mask);
 
 /**
  * @brief Function for disabling selected shortcuts.
  *
- * @param[in] p_reg      Pointer to the structure of registers of the peripheral.
- * @param[in] short_mask Mask of shortcuts.
+ * @param[in] short_mask Shortcut mask.
  */
-NRF_STATIC_INLINE void nrf_nfct_shorts_disable(NRF_NFCT_Type * p_reg, uint32_t short_mask);
+__STATIC_INLINE void nrf_nfct_shorts_disable(uint32_t short_mask);
 
 /**
  * @brief Function for retrieving the enabled shortcuts.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @return Flags of the currently enabled shortcuts.
  */
-NRF_STATIC_INLINE uint32_t nrf_nfct_shorts_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE uint32_t nrf_nfct_shorts_get(void);
 
 /**
  * @brief Function for setting shortcuts.
  *
- * @param[in] p_reg      Pointer to the structure of registers of the peripheral.
  * @param[in] short_mask Shortcut mask.
  */
-NRF_STATIC_INLINE void nrf_nfct_shorts_set(NRF_NFCT_Type * p_reg, uint32_t short_mask);
+__STATIC_INLINE void nrf_nfct_shorts_set(uint32_t short_mask);
 
 /**
  * @brief Function for enabling the selected interrupts.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] mask  Mask of interrupts to be enabled.
+ * @param[in] int_mask Interrupt mask.
  */
-NRF_STATIC_INLINE void nrf_nfct_int_enable(NRF_NFCT_Type * p_reg, uint32_t mask);
+__STATIC_INLINE void nrf_nfct_int_enable(uint32_t int_mask);
 
 /**
- * @brief Function for checking if the specified interrupts are enabled.
+ * @brief Function for retrieving the state of the selected interrupts.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] mask  Mask of interrupts to be checked.
+ * @param[in] int_mask Interrupt mask.
  *
- * @return Mask of enabled interrupts.
+ * @retval true If any of the selected interrupts is enabled.
+ * @retval false If none of the selected interrupts is enabled.
  */
-NRF_STATIC_INLINE uint32_t nrf_nfct_int_enable_check(NRF_NFCT_Type const * p_reg, uint32_t mask);
+__STATIC_INLINE bool nrf_nfct_int_enable_check(uint32_t int_mask);
 
 /**
  * @brief Function for retrieving the information about enabled interrupts.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @return The flags of the enabled interrupts.
  */
-NRF_STATIC_INLINE uint32_t nrf_nfct_int_enable_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE uint32_t nrf_nfct_int_enable_get(void);
 
 /**
  * @brief Function for disabling the selected interrupts.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] mask  Mask of interrupts to be disabled.
+ * @param[in] int_mask Interrupt mask.
  */
-NRF_STATIC_INLINE void nrf_nfct_int_disable(NRF_NFCT_Type * p_reg, uint32_t mask);
-
-#if defined(NFCT_MODULATIONPSEL_PIN_Msk) || defined(__NRFX_DOXYGEN__)
-
-/**
- * @brief Function for configuring the NFCT modulation control pin.
- *
- * If a given signal is not needed, pass the @ref NRF_NFCT_MOD_CTRL_PIN_NOT_CONNECTED
- * value instead of its pin number.
- *
- * @param[in] p_reg        Pointer to the structure of registers of the peripheral.
- * @param[in] mod_ctrl_pin Modulation control pin.
- */
-NRF_STATIC_INLINE void nrf_nfct_mod_ctrl_pin_set(NRF_NFCT_Type * p_reg, uint32_t mod_ctrl_pin);
-
-/**
- * @brief Function for getting the modulation control pin.
- *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
- * @return Modulation control pin number.
- */
-NRF_STATIC_INLINE uint32_t nrf_nfct_mod_ctrl_pin_get(NRF_NFCT_Type const * p_reg);
-#endif // defined(NFCT_MODULATIONPSEL_PIN_Msk) || defined(__NRFX_DOXYGEN__)
-
-#if defined(NFCT_MODULATIONCTRL_MODULATIONCTRL_Msk) || defined(__NRFX_DOXYGEN__)
-/**
- * @brief Function for setting the modulation output. It enables the
- *        output to a GPIO pin which can be connected to a second external.
- *
- * @param[in] p_reg    Pointer to the structure of registers of the peripheral.
- * @param[in] mod_ctrl Modulation control field configuration.
- */
-NRF_STATIC_INLINE void nrf_nfct_modulation_output_set(NRF_NFCT_Type *            p_reg,
-                                                      nrf_nfct_modulation_ctrl_t mod_ctrl);
-
-/**
- * @brief Function for getting the modulation output configuration.
- *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
- * @return The configured modulation output.
- */
-NRF_STATIC_INLINE
-nrf_nfct_modulation_ctrl_t nrf_nfct_modulation_output_get(NRF_NFCT_Type const * p_reg);
-#endif // defined(NFCT_MODULATIONCTRL_MODULATIONCTRL_Msk) || defined(__NRFX_DOXYGEN__)
+__STATIC_INLINE void nrf_nfct_int_disable(uint32_t int_mask);
 
 /**
  * @brief Function for getting the NFCT error status.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @return The NFCT error status flags, defined in @ref nrf_nfct_error_status_t.
  */
-NRF_STATIC_INLINE uint32_t nrf_nfct_error_status_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE uint32_t nrf_nfct_error_status_get(void);
 
 /**
  * @brief Function for clearing the NFCT error status.
  *
- * @param[in] p_reg      Pointer to the structure of registers of the peripheral.
  * @param[in] error_flag Error flags to be cleared, defined in @ref nrf_nfct_error_status_t.
  */
-NRF_STATIC_INLINE void nrf_nfct_error_status_clear(NRF_NFCT_Type * p_reg, uint32_t error_flag);
+__STATIC_INLINE void nrf_nfct_error_status_clear(uint32_t error_flag);
 
 /**
  * @brief Function for getting the NFC frame reception status.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @return The flags of the NFC frame reception status, defined in @ref nrf_nfct_rx_frame_status_t.
  */
-NRF_STATIC_INLINE uint32_t nrf_nfct_rx_frame_status_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE uint32_t nrf_nfct_rx_frame_status_get(void);
 
 /**
  * @brief Function for clearing the NFC frame reception status.
  *
- * @param[in] p_reg             Pointer to the structure of registers of the peripheral.
- * @param[in] framestatus_flags Status flags to be cleared,
- *                              defined in @ref nrf_nfct_rx_frame_status_t.
+ * @param[in] framestatus_flags Status flags to be cleared, defined in @ref nrf_nfct_rx_frame_status_t.
  */
-NRF_STATIC_INLINE void nrf_nfct_rx_frame_status_clear(NRF_NFCT_Type * p_reg,
-                                                      uint32_t        framestatus_flags);
+__STATIC_INLINE void nrf_nfct_rx_frame_status_clear(uint32_t framestatus_flags);
 
 #if defined(NFCT_NFCTAGSTATE_NFCTAGSTATE_Msk) || defined(__NRFX_DOXYGEN__)
 /**
  * @brief Function for getting the NFC tag state.
- *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
  *
  * @retval NRF_NFCT_TAG_STATE_DISABLED    NFC tag is disabled.
  * @retval NRF_NFCT_TAG_STATE_RAMP_UP     NFC tag is ramping up.
@@ -488,7 +419,7 @@ NRF_STATIC_INLINE void nrf_nfct_rx_frame_status_clear(NRF_NFCT_Type * p_reg,
  *                                        since the last symbol of the last received frame.
  * @retval NRF_NFCT_TAG_STATE_TRANSMIT    NFC tag is transmitting data.
  */
-NRF_STATIC_INLINE nrf_nfct_tag_state_t nrf_nfct_tag_state_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE nrf_nfct_tag_state_t nrf_nfct_tag_state_get(void);
 #endif // defined(NFCT_NFCTAGSTATE_NFCTAGSTATE_Msk) || defined(__NRFX_DOXYGEN__)
 
 #if defined (NFCT_SLEEPSTATE_SLEEPSTATE_Msk) || defined(__NRFX_DOXYGEN__)
@@ -497,162 +428,126 @@ NRF_STATIC_INLINE nrf_nfct_tag_state_t nrf_nfct_tag_state_get(NRF_NFCT_Type cons
  *
  * @details The returned value is the last state before the autimatic collision resolution started.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
- * @retval NRF_NFCT_SLEEP_STATE_IDLE    NFC tag was in IDLE state before the automatic
- *                                      collision resolution started.
- * @retval NRF_NFCT_SLEEP_STATE_SLEEP_A NFC tag was in SLEEP_A state before the automatic
- *                                      collision resolution started.
+ * @retval NRF_NFCT_SLEEP_STATE_IDLE    NFC tag was in IDLE state before the automatic collision resolution started.
+ * @retval NRF_NFCT_SLEEP_STATE_SLEEP_A NFC tag was in SLEEP_A state before the automatic collision resolution started.
  */
-NRF_STATIC_INLINE nrf_nfct_sleep_state_t nrf_nfct_sleep_state_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE nrf_nfct_sleep_state_t nrf_nfct_sleep_state_get(void);
 #endif // defined (NFCT_SLEEPSTATE_SLEEPSTATE_Msk) || defined(__NRFX_DOXYGEN__)
 
 /**
  * @brief Function for getting the status of the external NFC field detection.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
- * @return The NFC field detection status. Status bits can be checked by using
- *         @ref nrf_nfct_field_state_t.
+ * @return The NFC field detection status. Status bits can be checked by using @ref nrf_nfct_field_state_t.
  */
-NRF_STATIC_INLINE uint8_t nrf_nfct_field_status_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE uint8_t nrf_nfct_field_status_get(void);
 
 /**
  * @brief Function for getting the minimum Frame Delay Time value.
  *
  * @details This is the minimum value for Frame Delay Timer. It controls the shortest time between
- *          the last symbol of the last received frame and the start of the transmission of a new
- *          TX frame.
+ *          the last symbol of the last received frame and the start of the transmission of a new TX frame.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
  *
  * @return The minimum Frame Delay Time value in 13.56-MHz clock ticks.
  */
-NRF_STATIC_INLINE uint16_t nrf_nfct_frame_delay_min_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE uint16_t nrf_nfct_frame_delay_min_get(void);
 
 /**
  * @brief Function for setting the minimum Frame Delay Time value.
  *
  * @details This is the minimum value for Frame Delay Timer. It controls the shortest time between
- *          the last symbol of the last received frame and the start of the transmission of a new
- *          TX frame.
+ *          the last symbol of the last received frame and the start of the transmission of a new TX frame.
  *
- * @param[in] p_reg           Pointer to the structure of registers of the peripheral.
  * @param[in] frame_delay_min Minimum Frame Delay Time value in 13.56-MHz clock ticks.
  */
-NRF_STATIC_INLINE void nrf_nfct_frame_delay_min_set(NRF_NFCT_Type * p_reg,
-                                                    uint16_t        frame_delay_min);
+__STATIC_INLINE void nrf_nfct_frame_delay_min_set(uint16_t frame_delay_min);
 
 /**
  * @brief Function for getting the maximum Frame Delay Time value.
  *
  * @details This is the maximum value for Frame Delay Timer. It controls the longest time between
- *          the last symbol of the last received frame and the start of the transmission of a new
- *          TX frame. If no transmission starts before the Frame Delay Timer timeout,
+ *          the last symbol of the last received frame and the start of the transmission of a new TX frame.
+ *          If no transmission starts before the Frame Delay Timer timeout,
  *          @ref NRF_NFCT_ERROR_FRAMEDELAYTIMEOUT_MASK is set.
- *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
  *
  * @return The maximum Frame Delay Time value in 13.56-MHz clock ticks.
  */
-NRF_STATIC_INLINE uint32_t nrf_nfct_frame_delay_max_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE uint32_t nrf_nfct_frame_delay_max_get(void);
 
 /**
  * @brief Function for setting the maximum Frame Delay Time value.
  *
  * @details This is the maximum value for Frame Delay Timer. It controls the longest time between
- *          the last symbol of the last received frame and the start of the transmission of a new
- *          TX frame. If no transmission starts before the Frame Delay Timer timeout,
+ *          the last symbol of the last received frame and the start of the transmission of a new TX frame.
+ *          If no transmission starts before the Frame Delay Timer timeout,
  *          @ref NRF_NFCT_ERROR_FRAMEDELAYTIMEOUT_MASK is set.
  *
- * @param[in] p_reg           Pointer to the structure of registers of the peripheral.
  * @param[in] frame_delay_max Maximum Frame Delay Time value in 13.56-MHz clock ticks.
  */
-NRF_STATIC_INLINE void nrf_nfct_frame_delay_max_set(NRF_NFCT_Type * p_reg,
-                                                    uint32_t        frame_delay_max);
+__STATIC_INLINE void nrf_nfct_frame_delay_max_set(uint32_t frame_delay_max);
 
 /**
  * @brief Function for getting the Frame Delay Mode configuration.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @return The configured Frame Delay Mode.
  */
-NRF_STATIC_INLINE
-nrf_nfct_frame_delay_mode_t nrf_nfct_frame_delay_mode_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE nrf_nfct_frame_delay_mode_t nrf_nfct_frame_delay_mode_get(void);
 
 /**
  * @brief Function for setting the NFC Frame Delay Mode configuration.
  *
- * @param[in] p_reg            Pointer to the structure of registers of the peripheral.
  * @param[in] frame_delay_mode Frame Delay Mode configuration.
  */
-NRF_STATIC_INLINE void nrf_nfct_frame_delay_mode_set(NRF_NFCT_Type *             p_reg,
-                                                     nrf_nfct_frame_delay_mode_t frame_delay_mode);
+__STATIC_INLINE void nrf_nfct_frame_delay_mode_set(nrf_nfct_frame_delay_mode_t frame_delay_mode);
 
 /**
  * @brief Function for getting the pointer to the NFCT RX/TX buffer.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @return The configured pointer to the receive or transmit buffer.
  */
-NRF_STATIC_INLINE uint8_t * nrf_nfct_rxtx_buffer_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE uint8_t * nrf_nfct_rxtx_buffer_get(void);
 
 /**
  * @brief Function for setting the the NFCT RX/TX buffer (address and maximum length).
  *
  * @note Buffer for the NFC RX/TX data is used by EasyDMA and must be located in RAM.
  *
- * @param[in] p_reg        Pointer to the structure of registers of the peripheral.
  * @param[in] p_rxtx_buf   Pointer to the receive or transmit buffer.
- * @param[in] max_txrx_len Maximum receive or transmit length in bytes
- *                         (size of the RAM buffer for EasyDMA).
+ * @param[in] max_txrx_len Maximum receive or transmit length in bytes (size of the RAM buffer for EasyDMA).
  */
-NRF_STATIC_INLINE void nrf_nfct_rxtx_buffer_set(NRF_NFCT_Type * p_reg,
-                                                uint8_t *       p_rxtx_buf,
-                                                uint16_t        max_txrx_len);
+__STATIC_INLINE void nrf_nfct_rxtx_buffer_set(uint8_t * p_rxtx_buf,
+                                              uint16_t  max_txrx_len);
 
 /**
  * @brief Function for getting the NFCT RX/TX maximum buffer length.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
- * @return The configured maximum receive or transmit length in bytes (size of the RX/TX
- *         buffer for EasyDMA).
+ * @return The configured maximum receive or transmit length in bytes (size of the RX/TX buffer for EasyDMA).
  */
-NRF_STATIC_INLINE uint16_t nrf_nfct_max_rxtx_length_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE uint16_t nrf_nfct_max_rxtx_length_get(void);
 
 /**
  * @brief Function for getting the flags for NFC frame transmission configuration.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
- * @return The flags of the NFCT frame transmission configuration, defined in
- *         @ref nrf_nfct_tx_frame_config_t.
+ * @return The flags of the NFCT frame transmission configuration, defined in @ref nrf_nfct_tx_frame_config_t.
  */
-NRF_STATIC_INLINE uint8_t nrf_nfct_tx_frame_config_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE uint8_t nrf_nfct_tx_frame_config_get(void);
 
 /**
  * @brief Function for setting up the flags of the NFC frame transmission configuration.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- * @param[in] flags Flags for NFCT TX configuration. Use @ref nrf_nfct_tx_frame_config_t for
- *                  setting.
+ * @param[in] flags Flags for NFCT TX configuration. Use @ref nrf_nfct_tx_frame_config_t for setting.
  */
-NRF_STATIC_INLINE void nrf_nfct_tx_frame_config_set(NRF_NFCT_Type * p_reg, uint8_t flags);
+__STATIC_INLINE void nrf_nfct_tx_frame_config_set(uint8_t flags);
 
 /**
  * @brief Function for getting the length of the configured transmission frame.
  *
- * @note NFC frames do not have to consist of full bytes only, therefore data amount
- *       for transmission is configured in number of bits.
- *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
+ * @note NFC frames do not have to consist of full bytes only, therefore data amount for transmission
+ *       is configured in number of bits.
  *
  * @return Number of bits to be sent excluding CRC, parity, SoF, and EoF.
  */
-NRF_STATIC_INLINE uint16_t nrf_nfct_tx_bits_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE uint16_t nrf_nfct_tx_bits_get(void);
 
 /**
  * @brief Function for setting up the NFC frame transmission.
@@ -660,77 +555,63 @@ NRF_STATIC_INLINE uint16_t nrf_nfct_tx_bits_get(NRF_NFCT_Type const * p_reg);
  * @details Set the number of TX bits excluding CRC, parity, SoF, and EoF.
  *
  * @note Source of data for transmission is set by using @ref nrf_nfct_rxtx_buffer_set.
- * @note NFC frames do not have to consist of full bytes only, therefore data amount
- *       for transmission is configured in number of bits.
+ * @note NFC frames do not have to consist of full bytes only, therefore data amount for transmission
+ *       is configured in number of bits.
  *
- * @param[in] p_reg   Pointer to the structure of registers of the peripheral.
  * @param[in] tx_bits Overall number of bits to be sent.
  */
-NRF_STATIC_INLINE void nrf_nfct_tx_bits_set(NRF_NFCT_Type * p_reg, uint16_t tx_bits);
+__STATIC_INLINE void nrf_nfct_tx_bits_set(uint16_t tx_bits);
 
 /**
  * @brief Function for getting the flags of the NFC frame reception configuration.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
- * @return The flags for NFCT frame reception configuration, defined in
- *         @ref nrf_nfct_rx_frame_config_t.
+ * @return The flags for NFCT frame reception configuration, defined in @ref nrf_nfct_rx_frame_config_t.
  */
-NRF_STATIC_INLINE uint8_t nrf_nfct_rx_frame_config_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE uint8_t nrf_nfct_rx_frame_config_get(void);
 
 /**
  * @brief Function for setting up the NFC frame reception.
  *
  * @note Destination for the received data is set using @ref nrf_nfct_rxtx_buffer_set.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
  * @param[in] flags NFCT RX configuration flags. Use @ref nrf_nfct_rx_frame_config_t for setting
  *                  the desired configuration.
  */
-NRF_STATIC_INLINE void nrf_nfct_rx_frame_config_set(NRF_NFCT_Type * p_reg, uint8_t flags);
+__STATIC_INLINE void nrf_nfct_rx_frame_config_set(uint8_t flags);
 
 /**
  * @brief Function for getting the number of bits received from the NFC poller.
  *
- * @param[in] p_reg        Pointer to the structure of registers of the peripheral.
  * @param[in] crc_excluded Flag for excluding CRC size from calculation.
  *
- * @return Number of received bits including or excluding CRC, and excluding parity
- *         and SoF/EoF framing.
+ * @return Number of received bits including or excluding CRC, and excluding parity and SoF/EoF framing.
  */
-NRF_STATIC_INLINE uint16_t nrf_nfct_rx_bits_get(NRF_NFCT_Type const * p_reg, bool crc_excluded);
+__STATIC_INLINE uint16_t nrf_nfct_rx_bits_get(bool crc_excluded);
 
 /**
  * @brief Function for getting the NFCID1 (NFC tag identifier).
  *
- * @note This function always returns the full configuration of the NFCID1 setting (10 bytes),
- *       regardless of the NFCID1 size. The NFCID1 size can be configured using
- *       @ref nrf_nfct_sensres_nfcid1_size_set or @ref nrf_nfct_nfcid1_set.
+ * @note This function always returns the full configuration of the NFCID1 setting (10 bytes), regardless
+ *       of the NFCID1 size. The NFCID1 size can be configured using @ref nrf_nfct_sensres_nfcid1_size_set or
+ *       @ref nrf_nfct_nfcid1_set.
  *
- * @param[in]  p_reg        Pointer to the structure of registers of the peripheral.
- * @param[out] p_nfcid1_buf Pointer to a buffer for the NDFCID1 parameter.
- *                          The NFCID1 values are in little endian order,
- *                          that is: |NFCID1_3RD_LAST|NFCID1_2ND_LAST|NFCID1_LAST|.
+ * @param[out] p_nfcid1_buf Pointer to a buffer for the NDFCID1 parameter. The NFCID1 values are in
+ *                          little endian order, that is: |NFCID1_3RD_LAST|NFCID1_2ND_LAST|NFCID1_LAST|.
  *
  * @return Configured NFCID1 length
  */
-NRF_STATIC_INLINE
-nrf_nfct_sensres_nfcid1_size_t nrf_nfct_nfcid1_get(NRF_NFCT_Type const * p_reg,
-                                                   uint8_t *             p_nfcid1_buf);
+__STATIC_INLINE nrf_nfct_sensres_nfcid1_size_t nrf_nfct_nfcid1_get(uint8_t * p_nfcid1_buf);
 
 /**
  * @brief Function for setting the NFCID1 (NFC tag identifier).
  *
- * @note This function also configures the NFCIDSIZE field in the SENSRES
- *       register of the NFCT peripheral.
+ * @note This function also configures the NFCIDSIZE field in the SENSRES register of the NRF_NFCT peripheral.
  *
- * @param[in] p_reg        Pointer to the structure of registers of the peripheral.
  * @param[in] p_nfcid1_buf Pointer to the buffer with NDFCID1 bytes.
  * @param[in] nfcid1_size  Size of the NFCID1 in bytes.
  */
-NRF_STATIC_INLINE void nrf_nfct_nfcid1_set(NRF_NFCT_Type *                p_reg,
-                                           uint8_t const *                p_nfcid1_buf,
-                                           nrf_nfct_sensres_nfcid1_size_t nfcid1_size);
+__STATIC_INLINE void nrf_nfct_nfcid1_set(uint8_t const *                p_nfcid1_buf,
+                                         nrf_nfct_sensres_nfcid1_size_t nfcid1_size);
 
 #if defined (NFCT_AUTOCOLRESCONFIG_MODE_Msk) || defined(__NRFX_DOXYGEN__)
 /**
@@ -739,32 +620,26 @@ NRF_STATIC_INLINE void nrf_nfct_nfcid1_set(NRF_NFCT_Type *                p_reg,
  * @details The automatic collision resolution mechanism as defined in ISO 14443-3 and NFC Forum
  *          Digital Protocol Technical Specification 2.0, section 6.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @retval true  If automatic collision resolution is enabled.
  * @retval false If automatic collision resolution is disabled.
  */
-NRF_STATIC_INLINE bool nrf_nfct_autocolres_is_enabled(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE bool nrf_nfct_autocolres_is_enabled(void);
 
 /**
  * @brief Function for enabling the automatic collision resolution.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @details The automatic collision resolution mechanism as defined in ISO 14443-3 and NFC Forum
  *          Digital Protocol Technical Specification 2.0, section 6.
  */
-NRF_STATIC_INLINE void nrf_nfct_autocolres_enable(NRF_NFCT_Type * p_reg);
+__STATIC_INLINE void nrf_nfct_autocolres_enable(void);
 
 /**
  * @brief Function for disabling the automatic collision resolution.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @details The automatic collision resolution mechanism as defined in ISO 14443-3 and NFC Forum
  *          Digital Protocol Technical Specification 2.0, section 6.
  */
-NRF_STATIC_INLINE void nrf_nfct_autocolres_disable(NRF_NFCT_Type * p_reg);
+__STATIC_INLINE void nrf_nfct_autocolres_disable(void);
 #endif // defined (NFCT_AUTOCOLRESCONFIG_MODE_Msk) || defined(__NRFX_DOXYGEN__)
 
 /**
@@ -772,12 +647,9 @@ NRF_STATIC_INLINE void nrf_nfct_autocolres_disable(NRF_NFCT_Type * p_reg);
  *
  * @details The SENS_RES frame is handled automatically by the NFCT hardware.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @return NFCID1 (tag identifier) size.
  */
-NRF_STATIC_INLINE
-nrf_nfct_sensres_nfcid1_size_t nrf_nfct_sensres_nfcid1_size_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE nrf_nfct_sensres_nfcid1_size_t nrf_nfct_sensres_nfcid1_size_get(void);
 
 /**
  * @brief Function for setting the NFCID1 (tag identifier) size.field in the SENS_RES frame
@@ -785,62 +657,47 @@ nrf_nfct_sensres_nfcid1_size_t nrf_nfct_sensres_nfcid1_size_get(NRF_NFCT_Type co
  *
  * @note The SENS_RES frame is handled automatically by the NFCT hardware.
  *
- * @param[in] p_reg       Pointer to the structure of registers of the peripheral.
  * @param[in] nfcid1_size NFCID1 (tag identifier) size.
  *
  * @sa nrf_nfct_nfcid1_set()
  */
-NRF_STATIC_INLINE
-void nrf_nfct_sensres_nfcid1_size_set(NRF_NFCT_Type *                p_reg,
-                                      nrf_nfct_sensres_nfcid1_size_t nfcid1_size);
+__STATIC_INLINE void nrf_nfct_sensres_nfcid1_size_set(nrf_nfct_sensres_nfcid1_size_t nfcid1_size);
 
 /**
  * @brief Function for getting the Bit Frame SDD field from the SENS_RES frame configuration.
  *
  * @details The SENS_RES frame is handled automatically by the NFCT hardware.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @return The Bit Frame SDD field configuration.
  */
-NRF_STATIC_INLINE
-nrf_nfct_sensres_bit_frame_sdd_t nrf_nfct_sensres_bit_frame_sdd_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE nrf_nfct_sensres_bit_frame_sdd_t nrf_nfct_sensres_bit_frame_sdd_get(void);
 
 /**
  * @brief Function for setting the Bit Frame SDD field in the SENS_RES frame configuration.
  *
  * @note The SENS_RES frame is handled automatically by the NFCT hardware.
  *
- * @param[in] p_reg         Pointer to the structure of registers of the peripheral.
  * @param[in] bit_frame_sdd The Bit Frame SDD field configuration.
  */
-NRF_STATIC_INLINE
-void nrf_nfct_sensres_bit_frame_sdd_set(NRF_NFCT_Type *                  p_reg,
-                                        nrf_nfct_sensres_bit_frame_sdd_t bit_frame_sdd);
+__STATIC_INLINE void nrf_nfct_sensres_bit_frame_sdd_set(nrf_nfct_sensres_bit_frame_sdd_t bit_frame_sdd);
 
 /**
  * @brief Function for getting the Platform Config field from the SENS_RES frame configuration.
  *
  * @details The SENS_RES frame is handled automatically by the NFCT hardware.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @return The Platform Config field configuration.
  */
-NRF_STATIC_INLINE nrf_nfct_sensres_platform_config_t
-nrf_nfct_sensres_platform_config_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE nrf_nfct_sensres_platform_config_t nrf_nfct_sensres_platform_config_get(void);
 
 /**
  * @brief Function for setting the Platform Config field in the SENS_RES frame configuration.
  *
  * @note The SENS_RES frame is handled automatically by the NFCT hardware.
  *
- * @param[in] p_reg           Pointer to the structure of registers of the peripheral.
  * @param[in] platform_config The Platform Config field configuration.
  */
-NRF_STATIC_INLINE
-void nrf_nfct_sensres_platform_config_set(NRF_NFCT_Type *                    p_reg,
-                                          nrf_nfct_sensres_platform_config_t platform_config);
+__STATIC_INLINE void nrf_nfct_sensres_platform_config_set(nrf_nfct_sensres_platform_config_t platform_config);
 
 /**
  * @brief Function for checking the CASCADE bit of the SEL_RES frame.
@@ -849,285 +706,243 @@ void nrf_nfct_sensres_platform_config_set(NRF_NFCT_Type *                    p_r
  *          and indicates the status of the NFCID1 read operation to the NFC poller according to
  *          the NFC Forum Digital Protocol Speficiation 2.0, section 6.8.2.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @retval true  If NFCID1 read procedure is not complete.
  * @retval false If NFCID1 read procedure is complete.
  */
-NRF_STATIC_INLINE bool nrf_nfct_selres_cascade_check(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE bool nrf_nfct_selsres_cascade_check(void);
 
 /**
  * @brief Function for getting the Protocol field in the SEL_RES frame.
  *
  * @details The SEL_RES frame is handled automatically by the NFCT hardware.
  *
- * @param[in] p_reg Pointer to the structure of registers of the peripheral.
- *
  * @return Value of the Protocol field in the SEL_RES frame.
  */
-NRF_STATIC_INLINE
-nrf_nfct_selres_protocol_t nrf_nfct_selres_protocol_get(NRF_NFCT_Type const * p_reg);
+__STATIC_INLINE nrf_nfct_selres_protocol_t nrf_nfct_selsres_protocol_get(void);
 
 /**
  * @brief Function for setting the Protocol field in the SEL_RES frame configuration.
  *
  * @details The SEL_RES frame is handled automatically by the NFCT hardware.
  *
- * @param[in] p_reg            Pointer to the structure of registers of the peripheral.
  * @param[in] sel_res_protocol Value of the Protocol field in the SEL_RES frame.
  */
-NRF_STATIC_INLINE void nrf_nfct_selres_protocol_set(NRF_NFCT_Type *            p_reg,
-                                                    nrf_nfct_selres_protocol_t sel_res_protocol);
+__STATIC_INLINE void nrf_nfct_selres_protocol_set(nrf_nfct_selres_protocol_t sel_res_protocol);
 
-#ifndef NRF_DECLARE_ONLY
-NRF_STATIC_INLINE void nrf_nfct_task_trigger(NRF_NFCT_Type * p_reg, nrf_nfct_task_t task)
+#ifndef SUPPRESS_INLINE_IMPLEMENTATION
+__STATIC_INLINE void nrf_nfct_task_trigger(nrf_nfct_task_t task)
 {
-    *((volatile uint32_t *)((uint8_t *)p_reg + (uint32_t)task)) = 1UL;
+    *((volatile uint32_t *)((uint8_t *)NRF_NFCT + (uint32_t)task)) = 1UL;
 }
 
-NRF_STATIC_INLINE uint32_t nrf_nfct_task_address_get(NRF_NFCT_Type const * p_reg,
-                                                     nrf_nfct_task_t       task)
+__STATIC_INLINE uint32_t nrf_nfct_task_address_get(nrf_nfct_task_t task)
 {
-    return (uint32_t)((uint8_t *)p_reg + (uint32_t)task);
+    return (uint32_t)((uint8_t *)NRF_NFCT + (uint32_t)task);
 }
 
-NRF_STATIC_INLINE void nrf_nfct_event_clear(NRF_NFCT_Type * p_reg, nrf_nfct_event_t event)
+__STATIC_INLINE void nrf_nfct_event_clear(nrf_nfct_event_t event)
 {
-    *((volatile uint32_t *)((uint8_t *)p_reg + (uint32_t)event)) = 0UL;
+    *((volatile uint32_t *)((uint8_t *)NRF_NFCT + (uint32_t)event)) = 0UL;
     __DSB();
 }
 
-NRF_STATIC_INLINE bool nrf_nfct_event_check(NRF_NFCT_Type const * p_reg, nrf_nfct_event_t event)
+__STATIC_INLINE bool nrf_nfct_event_check(nrf_nfct_event_t event)
 {
-    return (bool)*(volatile const uint32_t *)((uint8_t *)p_reg + (uint32_t)event);
+    return (bool)*(volatile const uint32_t *)((uint8_t *)NRF_NFCT + (uint32_t)event);
 }
 
-NRF_STATIC_INLINE uint32_t nrf_nfct_event_address_get(NRF_NFCT_Type const * p_reg,
-                                                      nrf_nfct_event_t      event)
+__STATIC_INLINE uint32_t nrf_nfct_event_address_get(nrf_nfct_event_t event)
 {
-    return (uint32_t)((uint8_t *)p_reg + (uint32_t)event);
+    return (uint32_t)((uint8_t *)NRF_NFCT + (uint32_t)event);
 }
 
-NRF_STATIC_INLINE void nrf_nfct_shorts_enable(NRF_NFCT_Type * p_reg, uint32_t short_mask)
+__STATIC_INLINE void nrf_nfct_shorts_enable(uint32_t short_mask)
 {
-    p_reg->SHORTS |= short_mask;
+    NRF_NFCT->SHORTS |= short_mask;
 }
 
-NRF_STATIC_INLINE void nrf_nfct_shorts_disable(NRF_NFCT_Type * p_reg, uint32_t short_mask)
+__STATIC_INLINE void nrf_nfct_shorts_disable(uint32_t short_mask)
 {
-    p_reg->SHORTS &= ~short_mask;
+    NRF_NFCT->SHORTS &= ~short_mask;
 }
 
-NRF_STATIC_INLINE uint32_t nrf_nfct_shorts_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE uint32_t nrf_nfct_shorts_get(void)
 {
-    return p_reg->SHORTS;
+    return NRF_NFCT->SHORTS;
 }
 
-NRF_STATIC_INLINE void nrf_nfct_shorts_set(NRF_NFCT_Type * p_reg, uint32_t short_mask)
+__STATIC_INLINE void nrf_nfct_shorts_set(uint32_t short_mask)
 {
-    p_reg->SHORTS = short_mask;
+    NRF_NFCT->SHORTS = short_mask;
 }
 
-NRF_STATIC_INLINE void nrf_nfct_int_enable(NRF_NFCT_Type * p_reg, uint32_t mask)
+__STATIC_INLINE void nrf_nfct_int_enable(uint32_t int_mask)
 {
-    p_reg->INTENSET = mask;
+    NRF_NFCT->INTENSET = int_mask;
 }
 
-NRF_STATIC_INLINE uint32_t nrf_nfct_int_enable_check(NRF_NFCT_Type const * p_reg, uint32_t mask)
+__STATIC_INLINE bool nrf_nfct_int_enable_check(uint32_t int_mask)
 {
-    return p_reg->INTENSET & mask;
+    return (bool)(NRF_NFCT->INTENSET & int_mask);
 }
 
-NRF_STATIC_INLINE uint32_t nrf_nfct_int_enable_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE uint32_t nrf_nfct_int_enable_get(void)
 {
-    return p_reg->INTENSET;
+    return NRF_NFCT->INTENSET;
 }
 
-NRF_STATIC_INLINE void nrf_nfct_int_disable(NRF_NFCT_Type * p_reg, uint32_t mask)
+__STATIC_INLINE void nrf_nfct_int_disable(uint32_t int_mask)
 {
-    p_reg->INTENCLR = mask;
+    NRF_NFCT->INTENCLR = int_mask;
 }
 
-#if defined(NFCT_MODULATIONPSEL_PIN_Msk)
-NRF_STATIC_INLINE void nrf_nfct_mod_ctrl_pin_set(NRF_NFCT_Type * p_reg, uint32_t mod_ctrl_pin)
+__STATIC_INLINE uint32_t nrf_nfct_error_status_get(void)
 {
-    p_reg->MODULATIONPSEL = mod_ctrl_pin;
+    return NRF_NFCT->ERRORSTATUS;
 }
 
-NRF_STATIC_INLINE uint32_t nrf_nfct_mod_ctrl_pin_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE void nrf_nfct_error_status_clear(uint32_t error_flags)
 {
-    return p_reg->MODULATIONPSEL;
-}
-#endif // (NFCT_MODULATIONPSEL_PIN_Msk)
-
-#if defined(NFCT_MODULATIONCTRL_MODULATIONCTRL_Msk)
-NRF_STATIC_INLINE void nrf_nfct_modulation_output_set(NRF_NFCT_Type *            p_reg,
-                                                      nrf_nfct_modulation_ctrl_t mod_ctrl)
-{
-    p_reg->MODULATIONCTRL = (uint32_t)mod_ctrl;
+    NRF_NFCT->ERRORSTATUS = error_flags;
 }
 
-NRF_STATIC_INLINE
-nrf_nfct_modulation_ctrl_t nrf_nfct_modulation_output_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE uint32_t nrf_nfct_rx_frame_status_get(void)
 {
-    return (nrf_nfct_modulation_ctrl_t)(p_reg->MODULATIONCTRL &
-                                        NFCT_MODULATIONCTRL_MODULATIONCTRL_Msk);
-}
-#endif // defined(NFCT_MODULATIONCTRL_MODULATIONCTRL_Msk)
-
-NRF_STATIC_INLINE uint32_t nrf_nfct_error_status_get(NRF_NFCT_Type const * p_reg)
-{
-    return p_reg->ERRORSTATUS;
+    return NRF_NFCT->FRAMESTATUS.RX;
 }
 
-NRF_STATIC_INLINE void nrf_nfct_error_status_clear(NRF_NFCT_Type * p_reg, uint32_t error_flags)
+__STATIC_INLINE void nrf_nfct_rx_frame_status_clear(uint32_t framestatus_flags)
 {
-    p_reg->ERRORSTATUS = error_flags;
-}
-
-NRF_STATIC_INLINE uint32_t nrf_nfct_rx_frame_status_get(NRF_NFCT_Type const * p_reg)
-{
-    return p_reg->FRAMESTATUS.RX;
-}
-
-NRF_STATIC_INLINE void nrf_nfct_rx_frame_status_clear(NRF_NFCT_Type * p_reg,
-                                                      uint32_t        framestatus_flags)
-{
-    p_reg->FRAMESTATUS.RX = framestatus_flags;
+    NRF_NFCT->FRAMESTATUS.RX = framestatus_flags;
 }
 
 #if defined(NFCT_NFCTAGSTATE_NFCTAGSTATE_Msk) || defined(__NRFX_DOXYGEN__)
-NRF_STATIC_INLINE nrf_nfct_tag_state_t nrf_nfct_tag_state_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE nrf_nfct_tag_state_t nrf_nfct_tag_state_get(void)
 {
-    return (nrf_nfct_tag_state_t)((p_reg->NFCTAGSTATE & NFCT_NFCTAGSTATE_NFCTAGSTATE_Msk) >>
+    return (nrf_nfct_tag_state_t)((NRF_NFCT->NFCTAGSTATE & NFCT_NFCTAGSTATE_NFCTAGSTATE_Msk) >>
                                   NFCT_NFCTAGSTATE_NFCTAGSTATE_Pos);
 }
 #endif // defined(NFCT_NFCTAGSTATE_NFCTAGSTATE_Msk) || defined(__NRFX_DOXYGEN__)
 
 #if defined (NFCT_SLEEPSTATE_SLEEPSTATE_Msk) || defined(__NRFX_DOXYGEN__)
-NRF_STATIC_INLINE nrf_nfct_sleep_state_t nrf_nfct_sleep_state_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE nrf_nfct_sleep_state_t nrf_nfct_sleep_state_get(void)
 {
-    return (nrf_nfct_sleep_state_t)((p_reg->SLEEPSTATE & NFCT_SLEEPSTATE_SLEEPSTATE_Msk) >>
+    return (nrf_nfct_sleep_state_t)((NRF_NFCT->SLEEPSTATE & NFCT_SLEEPSTATE_SLEEPSTATE_Msk) >>
                                     NFCT_SLEEPSTATE_SLEEPSTATE_Pos);
 }
 #endif // defined (NFCT_SLEEPSTATE_SLEEPSTATE_Msk) || defined(__NRFX_DOXYGEN__)
 
-NRF_STATIC_INLINE uint8_t nrf_nfct_field_status_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE uint8_t nrf_nfct_field_status_get(void)
 {
-    return (uint8_t)(p_reg->FIELDPRESENT);
+    return (uint8_t)(NRF_NFCT->FIELDPRESENT);
 }
 
-NRF_STATIC_INLINE uint16_t nrf_nfct_frame_delay_min_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE uint16_t nrf_nfct_frame_delay_min_get(void)
 {
-    return (uint16_t)((p_reg->FRAMEDELAYMIN & NFCT_FRAMEDELAYMIN_FRAMEDELAYMIN_Msk) >>
+    return (uint16_t)((NRF_NFCT->FRAMEDELAYMIN & NFCT_FRAMEDELAYMIN_FRAMEDELAYMIN_Msk) >>
                       NFCT_FRAMEDELAYMIN_FRAMEDELAYMIN_Pos);
 }
 
-NRF_STATIC_INLINE void nrf_nfct_frame_delay_min_set(NRF_NFCT_Type * p_reg, uint16_t frame_delay_min)
+__STATIC_INLINE void nrf_nfct_frame_delay_min_set(uint16_t frame_delay_min)
 {
-    p_reg->FRAMEDELAYMIN =
+    NRF_NFCT->FRAMEDELAYMIN =
         ((uint32_t)frame_delay_min << NFCT_FRAMEDELAYMIN_FRAMEDELAYMIN_Pos) &
         NFCT_FRAMEDELAYMIN_FRAMEDELAYMIN_Msk;
 }
 
-NRF_STATIC_INLINE uint32_t nrf_nfct_frame_delay_max_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE uint32_t nrf_nfct_frame_delay_max_get(void)
 {
-    return (p_reg->FRAMEDELAYMAX & NFCT_FRAMEDELAYMAX_FRAMEDELAYMAX_Msk) >>
+    return (NRF_NFCT->FRAMEDELAYMAX & NFCT_FRAMEDELAYMAX_FRAMEDELAYMAX_Msk) >>
            NFCT_FRAMEDELAYMAX_FRAMEDELAYMAX_Pos;
 }
 
-NRF_STATIC_INLINE void nrf_nfct_frame_delay_max_set(NRF_NFCT_Type * p_reg, uint32_t frame_delay_max)
+__STATIC_INLINE void nrf_nfct_frame_delay_max_set(uint32_t frame_delay_max)
 {
-    p_reg->FRAMEDELAYMAX =
+    NRF_NFCT->FRAMEDELAYMAX =
         ((uint32_t)frame_delay_max << NFCT_FRAMEDELAYMAX_FRAMEDELAYMAX_Pos) &
         NFCT_FRAMEDELAYMAX_FRAMEDELAYMAX_Msk;
 }
 
-NRF_STATIC_INLINE
-nrf_nfct_frame_delay_mode_t nrf_nfct_frame_delay_mode_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE nrf_nfct_frame_delay_mode_t nrf_nfct_frame_delay_mode_get(void)
 {
-    return (nrf_nfct_frame_delay_mode_t)(p_reg->FRAMEDELAYMODE &
+    return (nrf_nfct_frame_delay_mode_t)(NRF_NFCT->FRAMEDELAYMODE &
                                          NFCT_FRAMEDELAYMODE_FRAMEDELAYMODE_Msk);
 }
 
-NRF_STATIC_INLINE void nrf_nfct_frame_delay_mode_set(NRF_NFCT_Type *             p_reg,
-                                                     nrf_nfct_frame_delay_mode_t frame_delay_mode)
+__STATIC_INLINE void nrf_nfct_frame_delay_mode_set(nrf_nfct_frame_delay_mode_t frame_delay_mode)
 {
-    p_reg->FRAMEDELAYMODE = (uint32_t)frame_delay_mode;
+    NRF_NFCT->FRAMEDELAYMODE = (uint32_t)frame_delay_mode;
 }
 
-NRF_STATIC_INLINE uint8_t * nrf_nfct_rxtx_buffer_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE uint8_t * nrf_nfct_rxtx_buffer_get(void)
 {
-    return (uint8_t *)(p_reg->PACKETPTR);
+    return (uint8_t *)(NRF_NFCT->PACKETPTR);
 }
 
-NRF_STATIC_INLINE void nrf_nfct_rxtx_buffer_set(NRF_NFCT_Type * p_reg,
-                                                uint8_t *       p_rxtx_buf,
-                                                uint16_t        max_txrx_len)
+__STATIC_INLINE void nrf_nfct_rxtx_buffer_set(uint8_t * p_rxtx_buf,
+                                              uint16_t  max_txrx_len)
 {
-    p_reg->PACKETPTR = (uint32_t)p_rxtx_buf;
-    p_reg->MAXLEN    = ((uint32_t)max_txrx_len << NFCT_MAXLEN_MAXLEN_Pos) & NFCT_MAXLEN_MAXLEN_Msk;
+    NRF_NFCT->PACKETPTR = (uint32_t)p_rxtx_buf;
+    NRF_NFCT->MAXLEN    = ((uint32_t)max_txrx_len << NFCT_MAXLEN_MAXLEN_Pos) &
+                                                     NFCT_MAXLEN_MAXLEN_Msk;
 }
 
-NRF_STATIC_INLINE uint16_t nrf_nfct_max_rxtx_length_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE uint16_t nrf_nfct_max_rxtx_length_get(void)
 {
-    return (uint16_t)((p_reg->MAXLEN & NFCT_MAXLEN_MAXLEN_Msk) >> NFCT_MAXLEN_MAXLEN_Pos);
+    return (uint16_t)((NRF_NFCT->MAXLEN & NFCT_MAXLEN_MAXLEN_Msk) >> NFCT_MAXLEN_MAXLEN_Pos);
 }
 
-NRF_STATIC_INLINE uint8_t nrf_nfct_tx_frame_config_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE uint8_t nrf_nfct_tx_frame_config_get(void)
 {
-    return (uint8_t)(p_reg->TXD.FRAMECONFIG);
+    return (uint8_t)(NRF_NFCT->TXD.FRAMECONFIG);
 }
 
-NRF_STATIC_INLINE void nrf_nfct_tx_frame_config_set(NRF_NFCT_Type * p_reg, uint8_t flags)
+__STATIC_INLINE void nrf_nfct_tx_frame_config_set(uint8_t flags)
 {
-    p_reg->TXD.FRAMECONFIG = flags;
+    NRF_NFCT->TXD.FRAMECONFIG = flags;
 }
 
-NRF_STATIC_INLINE uint16_t nrf_nfct_tx_bits_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE uint16_t nrf_nfct_tx_bits_get(void)
 {
-    return (uint16_t)(p_reg->TXD.AMOUNT & (NFCT_TXD_AMOUNT_TXDATABITS_Msk |
-                                           NFCT_TXD_AMOUNT_TXDATABYTES_Msk));
+    return (uint16_t)(NRF_NFCT->TXD.AMOUNT & (NFCT_TXD_AMOUNT_TXDATABITS_Msk |
+                                              NFCT_TXD_AMOUNT_TXDATABYTES_Msk));
 }
 
-NRF_STATIC_INLINE void nrf_nfct_tx_bits_set(NRF_NFCT_Type * p_reg, uint16_t tx_bits)
+__STATIC_INLINE void nrf_nfct_tx_bits_set(uint16_t tx_bits)
 {
-    p_reg->TXD.AMOUNT = (tx_bits & (NFCT_TXD_AMOUNT_TXDATABITS_Msk |
-                                    NFCT_TXD_AMOUNT_TXDATABYTES_Msk));
+    NRF_NFCT->TXD.AMOUNT = (tx_bits & (NFCT_TXD_AMOUNT_TXDATABITS_Msk | NFCT_TXD_AMOUNT_TXDATABYTES_Msk));
 }
 
-NRF_STATIC_INLINE uint8_t nrf_nfct_rx_frame_config_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE uint8_t nrf_nfct_rx_frame_config_get(void)
 {
-    return (uint8_t)(p_reg->RXD.FRAMECONFIG);
+    return (uint8_t)(NRF_NFCT->RXD.FRAMECONFIG);
 }
 
-NRF_STATIC_INLINE void nrf_nfct_rx_frame_config_set(NRF_NFCT_Type * p_reg, uint8_t flags)
+__STATIC_INLINE void nrf_nfct_rx_frame_config_set(uint8_t flags)
 {
-    p_reg->RXD.FRAMECONFIG = flags;
+    NRF_NFCT->RXD.FRAMECONFIG = flags;
 }
 
-NRF_STATIC_INLINE uint16_t nrf_nfct_rx_bits_get(NRF_NFCT_Type const * p_reg, bool crc_excluded)
+__STATIC_INLINE uint16_t nrf_nfct_rx_bits_get(bool crc_excluded)
 {
-    uint16_t rx_bits = p_reg->RXD.AMOUNT & (NFCT_RXD_AMOUNT_RXDATABITS_Msk |
-                                            NFCT_RXD_AMOUNT_RXDATABYTES_Msk);
+    uint16_t rx_bits = NRF_NFCT->RXD.AMOUNT & (NFCT_RXD_AMOUNT_RXDATABITS_Msk |
+                                               NFCT_RXD_AMOUNT_RXDATABYTES_Msk);
     return rx_bits - (crc_excluded ? (8u * NRF_NFCT_CRC_SIZE) : 0);
 }
 
-NRF_STATIC_INLINE
-nrf_nfct_sensres_nfcid1_size_t nrf_nfct_nfcid1_get(NRF_NFCT_Type const * p_reg,
-                                                   uint8_t *             p_nfcid1_buf)
+__STATIC_INLINE nrf_nfct_sensres_nfcid1_size_t nrf_nfct_nfcid1_get(uint8_t * p_nfcid1_buf)
 {
-    uint32_t nfcid1_last = p_reg->NFCID1_LAST;
+    uint32_t nfcid1_last = NRF_NFCT->NFCID1_LAST;
     nrf_nfct_sensres_nfcid1_size_t size =
-        (nrf_nfct_sensres_nfcid1_size_t)(p_reg->SENSRES & NFCT_SENSRES_NFCIDSIZE_Msk);
+        (nrf_nfct_sensres_nfcid1_size_t)(NRF_NFCT->SENSRES & NFCT_SENSRES_NFCIDSIZE_Msk);
 
     if (size != NRF_NFCT_SENSRES_NFCID1_SIZE_SINGLE)
     {
-        uint32_t nfcid1_2nd_last = p_reg->NFCID1_2ND_LAST;
+        uint32_t nfcid1_2nd_last = NRF_NFCT->NFCID1_2ND_LAST;
 
         if (size == NRF_NFCT_SENSRES_NFCID1_SIZE_TRIPLE)
         {
-            uint32_t nfcid1_3rd_last = p_reg->NFCID1_3RD_LAST;
+            uint32_t nfcid1_3rd_last = NRF_NFCT->NFCID1_3RD_LAST;
 
             *p_nfcid1_buf++ = (uint8_t)(nfcid1_3rd_last >> 16UL);
             *p_nfcid1_buf++ = (uint8_t)(nfcid1_3rd_last >> 8UL);
@@ -1147,9 +962,8 @@ nrf_nfct_sensres_nfcid1_size_t nrf_nfct_nfcid1_get(NRF_NFCT_Type const * p_reg,
     return size;
 }
 
-NRF_STATIC_INLINE void nrf_nfct_nfcid1_set(NRF_NFCT_Type *                p_reg,
-                                           uint8_t const *                p_nfcid1_buf,
-                                           nrf_nfct_sensres_nfcid1_size_t nfcid1_size)
+__STATIC_INLINE void nrf_nfct_nfcid1_set(uint8_t const *                p_nfcid1_buf,
+                                         nrf_nfct_sensres_nfcid1_size_t nfcid1_size)
 {
     nrf_nfct_sensres_nfcid1_size_t size = (nfcid1_size == NRF_NFCT_SENSRES_NFCID1_SIZE_DEFAULT) ?
         NRF_NFCT_SENSRES_NFCID1_SIZE_DOUBLE : nfcid1_size;
@@ -1158,107 +972,95 @@ NRF_STATIC_INLINE void nrf_nfct_nfcid1_set(NRF_NFCT_Type *                p_reg,
     {
         if (size == NRF_NFCT_SENSRES_NFCID1_SIZE_TRIPLE)
         {
-            p_reg->NFCID1_3RD_LAST = ((uint32_t)p_nfcid1_buf[0] << 16UL) |
+            NRF_NFCT->NFCID1_3RD_LAST = ((uint32_t)p_nfcid1_buf[0] << 16UL) |
                                         ((uint32_t)p_nfcid1_buf[1] << 8UL)  |
                                         ((uint32_t)p_nfcid1_buf[2] << 0UL);
             p_nfcid1_buf += 3UL;
         }
-        p_reg->NFCID1_2ND_LAST = ((uint32_t)p_nfcid1_buf[0] << 16UL) |
+        NRF_NFCT->NFCID1_2ND_LAST = ((uint32_t)p_nfcid1_buf[0] << 16UL) |
                                     ((uint32_t)p_nfcid1_buf[1] << 8UL)  |
                                     ((uint32_t)p_nfcid1_buf[2] << 0UL);
         p_nfcid1_buf += 3UL;
     }
 
-    p_reg->NFCID1_LAST = ((uint32_t)p_nfcid1_buf[0] << 24UL) |
+    NRF_NFCT->NFCID1_LAST = ((uint32_t)p_nfcid1_buf[0] << 24UL) |
                             ((uint32_t)p_nfcid1_buf[1] << 16UL) |
                             ((uint32_t)p_nfcid1_buf[2] << 8UL)  |
                             ((uint32_t)p_nfcid1_buf[3] << 0UL);
 
-    p_reg->SENSRES = ((p_reg->SENSRES & ~NFCT_SENSRES_NFCIDSIZE_Msk) |
+    NRF_NFCT->SENSRES = ((NRF_NFCT->SENSRES & ~NFCT_SENSRES_NFCIDSIZE_Msk) |
                          (uint32_t)size);
 }
 
 #if defined (NFCT_AUTOCOLRESCONFIG_MODE_Msk) || defined(__NRFX_DOXYGEN__)
-NRF_STATIC_INLINE bool nrf_nfct_autocolres_is_enabled(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE bool nrf_nfct_autocolres_is_enabled(void)
 {
-    return (p_reg->AUTOCOLRESCONFIG & NFCT_AUTOCOLRESCONFIG_MODE_Msk) ==
+    return (NRF_NFCT->AUTOCOLRESCONFIG & NFCT_AUTOCOLRESCONFIG_MODE_Msk) ==
            (NFCT_AUTOCOLRESCONFIG_MODE_Enabled << NFCT_AUTOCOLRESCONFIG_MODE_Pos);
 }
 
-NRF_STATIC_INLINE void nrf_nfct_autocolres_enable(NRF_NFCT_Type * p_reg)
+__STATIC_INLINE void nrf_nfct_autocolres_enable(void)
 {
-    p_reg->AUTOCOLRESCONFIG =
-        (p_reg->AUTOCOLRESCONFIG & ~NFCT_AUTOCOLRESCONFIG_MODE_Msk) |
+    NRF_NFCT->AUTOCOLRESCONFIG = 
+        (NRF_NFCT->AUTOCOLRESCONFIG & ~NFCT_AUTOCOLRESCONFIG_MODE_Msk) |
         (NFCT_AUTOCOLRESCONFIG_MODE_Enabled << NFCT_AUTOCOLRESCONFIG_MODE_Pos);
 }
 
-NRF_STATIC_INLINE void nrf_nfct_autocolres_disable(NRF_NFCT_Type * p_reg)
+__STATIC_INLINE void nrf_nfct_autocolres_disable(void)
 {
-    p_reg->AUTOCOLRESCONFIG =
-        (p_reg->AUTOCOLRESCONFIG & ~NFCT_AUTOCOLRESCONFIG_MODE_Msk) |
+    NRF_NFCT->AUTOCOLRESCONFIG =
+        (NRF_NFCT->AUTOCOLRESCONFIG & ~NFCT_AUTOCOLRESCONFIG_MODE_Msk) |
         (NFCT_AUTOCOLRESCONFIG_MODE_Disabled << NFCT_AUTOCOLRESCONFIG_MODE_Pos);
 }
 #endif // defined (NFCT_AUTOCOLRESCONFIG_MODE_Msk) || defined(__NRFX_DOXYGEN__)
 
-NRF_STATIC_INLINE
-nrf_nfct_sensres_nfcid1_size_t nrf_nfct_sensres_nfcid1_size_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE nrf_nfct_sensres_nfcid1_size_t nrf_nfct_sensres_nfcid1_size_get(void)
 {
-    return (nrf_nfct_sensres_nfcid1_size_t)(p_reg->SENSRES & NFCT_SENSRES_NFCIDSIZE_Msk);
+    return (nrf_nfct_sensres_nfcid1_size_t)(NRF_NFCT->SENSRES & NFCT_SENSRES_NFCIDSIZE_Msk);
 }
 
-NRF_STATIC_INLINE void nrf_nfct_sensres_nfcid1_size_set(NRF_NFCT_Type *                p_reg,
-                                                        nrf_nfct_sensres_nfcid1_size_t nfcid1_size)
+__STATIC_INLINE void nrf_nfct_sensres_nfcid1_size_set(nrf_nfct_sensres_nfcid1_size_t nfcid1_size)
 {
-    p_reg->SENSRES = ((p_reg->SENSRES & ~(NFCT_SENSRES_NFCIDSIZE_Msk)) |
-                         (uint32_t)nfcid1_size);
+    NRF_NFCT->SENSRES = ((NRF_NFCT->SENSRES & ~(NFCT_SENSRES_NFCIDSIZE_Msk)) | (uint32_t)nfcid1_size);
 }
 
-NRF_STATIC_INLINE
-nrf_nfct_sensres_bit_frame_sdd_t nrf_nfct_sensres_bit_frame_sdd_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE nrf_nfct_sensres_bit_frame_sdd_t nrf_nfct_sensres_bit_frame_sdd_get(void)
 {
-    return (nrf_nfct_sensres_bit_frame_sdd_t)(p_reg->SENSRES & NFCT_SENSRES_BITFRAMESDD_Msk);
+    return (nrf_nfct_sensres_bit_frame_sdd_t)(NRF_NFCT->SENSRES & NFCT_SENSRES_BITFRAMESDD_Msk);
 }
 
-NRF_STATIC_INLINE
-void nrf_nfct_sensres_bit_frame_sdd_set(NRF_NFCT_Type * p_reg,
-                                        nrf_nfct_sensres_bit_frame_sdd_t bit_frame_sdd)
+__STATIC_INLINE void nrf_nfct_sensres_bit_frame_sdd_set(nrf_nfct_sensres_bit_frame_sdd_t bit_frame_sdd)
 {
-    p_reg->SENSRES = ((p_reg->SENSRES & ~(NFCT_SENSRES_BITFRAMESDD_Msk)) | (uint32_t)bit_frame_sdd);
+    NRF_NFCT->SENSRES = ((NRF_NFCT->SENSRES & ~(NFCT_SENSRES_BITFRAMESDD_Msk)) | (uint32_t)bit_frame_sdd);
 }
 
-NRF_STATIC_INLINE
-nrf_nfct_sensres_platform_config_t nrf_nfct_sensres_platform_config_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE nrf_nfct_sensres_platform_config_t nrf_nfct_sensres_platform_config_get(void)
 {
-    return (nrf_nfct_sensres_platform_config_t)(p_reg->SENSRES & NFCT_SENSRES_PLATFCONFIG_Msk);
+    return (nrf_nfct_sensres_platform_config_t)(NRF_NFCT->SENSRES & NFCT_SENSRES_PLATFCONFIG_Msk);
 }
 
-NRF_STATIC_INLINE
-void nrf_nfct_sensres_platform_config_set(NRF_NFCT_Type * p_reg,
-                                          nrf_nfct_sensres_platform_config_t platform_config)
+__STATIC_INLINE void nrf_nfct_sensres_platform_config_set(nrf_nfct_sensres_platform_config_t platform_config)
 {
-    p_reg->SENSRES = ((p_reg->SENSRES & ~(NFCT_SENSRES_PLATFCONFIG_Msk)) |
-                      (uint32_t)platform_config);
+    NRF_NFCT->SENSRES = ((NRF_NFCT->SENSRES & ~(NFCT_SENSRES_PLATFCONFIG_Msk)) | (uint32_t)platform_config);
 }
 
-NRF_STATIC_INLINE bool nrf_nfct_selres_cascade_check(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE bool nrf_nfct_selsres_cascade_check(void)
 {
-    return (bool)(p_reg->SELRES & NFCT_SELRES_CASCADE_Msk);
+    return (bool)(NRF_NFCT->SELRES & NFCT_SELRES_CASCADE_Msk);
 }
 
-NRF_STATIC_INLINE
-nrf_nfct_selres_protocol_t nrf_nfct_selres_protocol_get(NRF_NFCT_Type const * p_reg)
+__STATIC_INLINE nrf_nfct_selres_protocol_t nrf_nfct_selsres_protocol_get(void)
 {
-    return (nrf_nfct_selres_protocol_t)((p_reg->SELRES & NFCT_SELRES_PROTOCOL_Msk) >>
+    return (nrf_nfct_selres_protocol_t)((NRF_NFCT->SELRES & NFCT_SELRES_PROTOCOL_Msk) >>
                                         NFCT_SELRES_PROTOCOL_Pos);
 }
 
-NRF_STATIC_INLINE void nrf_nfct_selres_protocol_set(NRF_NFCT_Type *            p_reg,
-                                                    nrf_nfct_selres_protocol_t sel_res_protocol)
+__STATIC_INLINE void nrf_nfct_selres_protocol_set(nrf_nfct_selres_protocol_t sel_res_protocol)
 {
-    p_reg->SELRES = (p_reg->SELRES & ~NFCT_SELRES_PROTOCOL_Msk) |
-                    ((uint32_t)sel_res_protocol << NFCT_SELRES_PROTOCOL_Pos);
+    NRF_NFCT->SELRES = (NRF_NFCT->SELRES & ~NFCT_SELRES_PROTOCOL_Msk) |
+                       ((uint32_t)sel_res_protocol << NFCT_SELRES_PROTOCOL_Pos);
 }
-#endif /* NRF_DECLARE_ONLY */
+#endif /* SUPPRESS_INLINE_IMPLEMENTATION */
 
 /** @} */
 

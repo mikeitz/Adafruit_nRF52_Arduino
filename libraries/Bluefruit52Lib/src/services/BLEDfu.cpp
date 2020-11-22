@@ -137,10 +137,11 @@ static void bledfu_control_wr_authorize_cb(uint16_t conn_hdl, BLECharacteristic*
       // Get Bond Data or using Address if not bonded
       peer_data->addr = conn->getPeerAddr();
 
-      if ( conn->secured() )
+      if ( conn->paired() )
       {
         bond_keys_t bkeys;
-        if ( conn->loadBondKey(&bkeys) )
+
+        if ( conn->loadKeys(&bkeys) )
         {
           peer_data->addr    = bkeys.peer_id.id_addr_info;
           peer_data->irk     = bkeys.peer_id.id_info;
@@ -163,12 +164,18 @@ static void bledfu_control_wr_authorize_cb(uint16_t conn_hdl, BLECharacteristic*
       VERIFY_STATUS( sd_softdevice_disable(),  );
 
       // Disable all interrupts
-      NVIC->ICER[0]=0xFFFFFFFF;
-      NVIC->ICPR[0]=0xFFFFFFFF;
-#if defined(__NRF_NVIC_ISER_COUNT) && __NRF_NVIC_ISER_COUNT == 2
-      NVIC->ICER[1]=0xFFFFFFFF;
-      NVIC->ICPR[1]=0xFFFFFFFF;
-#endif
+      #if defined(NRF52832_XXAA)
+      #define MAX_NUMBER_INTERRUPTS  39
+      #elif defined(NRF52840_XXAA)
+      #define MAX_NUMBER_INTERRUPTS  48
+      #endif
+
+      NVIC_ClearPendingIRQ(SD_EVT_IRQn);
+      for(int i=0; i < MAX_NUMBER_INTERRUPTS; i++)
+      {
+        NVIC_DisableIRQ( (IRQn_Type) i );
+      }
+
       // Clear RTC1 timer to prevent Interrupt happens after changing vector table
 //      NRF_RTC1->EVTENCLR    = RTC_EVTEN_COMPARE0_Msk;
 //      NRF_RTC1->INTENCLR    = RTC_INTENSET_COMPARE0_Msk;
@@ -183,8 +190,7 @@ static void bledfu_control_wr_authorize_cb(uint16_t conn_hdl, BLECharacteristic*
   }
 }
 
-BLEDfu::BLEDfu(void)
- : BLEService(UUID128_SVC_DFU_OTA), _chr_control(UUID128_CHR_DFU_CONTROL)
+BLEDfu::BLEDfu(void) : BLEService(UUID128_SVC_DFU_OTA), _chr_control(UUID128_CHR_DFU_CONTROL)
 {
 
 }

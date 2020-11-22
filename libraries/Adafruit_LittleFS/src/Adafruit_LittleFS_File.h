@@ -44,8 +44,6 @@ class File : public Stream
     File (Adafruit_LittleFS &fs);
     File (char const *filename, uint8_t mode, Adafruit_LittleFS &fs);
 
-  public:
-
     bool open (char const *filename, uint8_t mode);
 
     //------------- Stream API -------------//
@@ -70,14 +68,8 @@ class File : public Stream
     uint32_t position (void);
     uint32_t size (void);
 
-    bool truncate (uint32_t pos);
-    bool truncate (void);
-
     void close (void);
-
     operator bool (void);
-
-    bool isOpen(void);
     char const* name (void);
 
     bool isDirectory (void);
@@ -97,10 +89,8 @@ class File : public Stream
     char* _dir_path;
     char  _name[LFS_NAME_MAX+1];
 
-    bool _open(char const *filepath, uint8_t mode);
     bool _open_file(char const *filepath, uint8_t mode);
     bool _open_dir (char const *filepath);
-    void _close(void);
 };
 
 }

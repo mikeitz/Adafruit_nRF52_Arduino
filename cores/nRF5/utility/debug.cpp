@@ -39,7 +39,6 @@
 #include <malloc.h>
 #include <Arduino.h>
 #include <ctype.h>
-#include <common_func.h>
 
 // defined in linker script
 extern uint32_t __data_start__[];
@@ -107,14 +106,14 @@ static void printMemRegion(const char* name, uint32_t top, uint32_t bottom, uint
     sprintf(buffer, "%lu", top-bottom);
   }
 
-  PRINTF("| %-5s| 0x%04X - 0x%04X | %-19s |\n", name, (uint16_t) bottom, (uint16_t) (top-1), buffer);
+  printf("| %-5s| 0x%04X - 0x%04X | %-19s |\n", name, (uint16_t) bottom, (uint16_t) (top-1), buffer);
 }
 
 void dbgMemInfo(void)
 {
-  PRINTF(" ______________________________________________\n");
-  PRINTF("| Name | Addr 0x2000xxxx | Usage               |\n");
-  PRINTF("| ---------------------------------------------|\n");
+  printf(" ______________________________________________\n");
+  printf("| Name | Addr 0x2000xxxx | Usage               |\n");
+  printf("| ---------------------------------------------|\n");
 
   // Pritn SRAM used for Stack executed by Softdevice and ISR
   printMemRegion("Stack", ((uint32_t) __StackTop), ((uint32_t) __StackLimit), dbgStackUsed() );
@@ -128,8 +127,8 @@ void dbgMemInfo(void)
   // Print SRAM Used by SoftDevice
   printMemRegion("SD", (uint32_t) __data_start__, 0x20000000, 0);
 
-  PRINTF("|______________________________________________|\n");
-  PRINTF("\n");
+  printf("|______________________________________________|\n");
+  printf("\n");
 
   // Print Task list
   uint32_t tasknum = uxTaskGetNumberOfTasks();
@@ -137,20 +136,20 @@ void dbgMemInfo(void)
 
   vTaskList(buf);
 
-  PRINTF("Task    State   Prio  StackLeft Num\n");
-  PRINTF("-----------------------------------\n");
-  PRINTF(buf);
-  PRINTF("\n");
+  printf("Task    State   Prio  StackLeft Num\n");
+  printf("-----------------------------------\n");
+  printf(buf);
+  printf("\n");
   rtos_free(buf);
 }
 
 void dbgPrintVersion(void)
 {
-  PRINTF("\n");
-  PRINTF("BSP Library : " ARDUINO_BSP_VERSION "\n");
-  PRINTF("Bootloader  : %s\n", getBootloaderVersion());
-  PRINTF("Serial No   : %s\n", getMcuUniqueID());
-  PRINTF("\n");
+  printf("\n");
+  printf("BSP Library : " ARDUINO_BSP_VERSION "\n");
+  printf("Bootloader  : %s\n", getBootloaderVersion());
+  printf("Serial No   : %s\n", getMcuUniqueID());
+  printf("\n");
 }
 
 /******************************************************************************/
@@ -164,7 +163,7 @@ static void dump_str_line(uint8_t const* buf, uint16_t count)
   for(int i=0; i<count; i++)
   {
     const char ch = buf[i];
-    PRINTF("%c", isprint(ch) ? ch : '.');
+    printf("%c", isprint(ch) ? ch : '.');
   }
 }
 
@@ -172,7 +171,7 @@ void dbgDumpMemory(void const *buf, uint8_t size, uint16_t count, bool printOffs
 {
   if ( !buf || !count )
   {
-    PRINTF("NULL\n");
+    printf("NULL\n");
     return;
   }
 
@@ -192,26 +191,26 @@ void dbgDumpMemory(void const *buf, uint8_t size, uint16_t count, bool printOffs
       // Print Ascii
       if ( i != 0 )
       {
-        PRINTF(" | ");
+        printf(" | ");
         dump_str_line(buf8-16, 16);
-        PRINTF("\n");
+        printf("\n");
       }
 
       // print offset or absolute address
       if (printOffset)
       {
-        PRINTF("%03lX: ", 16*i/item_per_line);
+        printf("%03lX: ", 16*i/item_per_line);
       }else
       {
-        PRINTF("%08lX:", (uint32_t) buf8);
+        printf("%08lX:", (uint32_t) buf8);
       }
     }
 
     memcpy(&value, buf8, size);
     buf8 += size;
 
-    PRINTF(" ");
-    PRINTF(format, value);
+    printf(" ");
+    printf(format, value);
   }
 
   // fill up last row to 16 for printing ascii
@@ -222,16 +221,16 @@ void dbgDumpMemory(void const *buf, uint8_t size, uint16_t count, bool printOffs
   {
     for(int i=0; i< 16-remain; i++)
     {
-      PRINTF(" ");
-      for(int j=0; j<2*size; j++) PRINTF(" ");
+      printf(" ");
+      for(int j=0; j<2*size; j++) printf(" ");
     }
   }
 
-  PRINTF(" | ");
+  printf(" | ");
   dump_str_line(buf8-nback, nback);
-  PRINTF("\n");
+  printf("\n");
 
-  PRINTF("\n");
+  printf("\n");
 }
 
 
@@ -239,11 +238,11 @@ void dbgDumpMemoryCFormat(const char* str, void const *buf, uint16_t count)
 {
   if ( !buf )
   {
-    PRINTF("NULL\n");
+    printf("NULL\n");
     return;
   }
 
-  PRINTF("%s = \n{\n  ", str);
+  printf("%s = \n{\n  ", str);
 
   uint8_t const *buf8 = (uint8_t const *) buf;
 
@@ -251,17 +250,17 @@ void dbgDumpMemoryCFormat(const char* str, void const *buf, uint16_t count)
   {
     if ( i%16 == 0 )
     {
-      if ( i != 0 ) PRINTF(",\n  ");
+      if ( i != 0 ) printf(",\n  ");
     }else
     {
-      if ( i != 0 ) PRINTF(", ");
+      if ( i != 0 ) printf(", ");
     }
 
-    PRINTF("0x%02X", *buf8);
+    printf("0x%02X", *buf8);
     buf8++;
   }
 
-  PRINTF("\n};\n");
+  printf("\n};\n");
 }
 
 
@@ -437,53 +436,6 @@ const char* dbg_err_str(int32_t err_id)
   }
 
   return str;
-}
-
-//--------------------------------------------------------------------+
-// HCI STATUS
-//--------------------------------------------------------------------+
-static lookup_entry_t const _strhci_lookup[] =
-{
-  { .key = BLE_HCI_STATUS_CODE_SUCCESS                         , .data = "STATUS_CODE_SUCCESS"                         },
-  { .key = BLE_HCI_STATUS_CODE_UNKNOWN_BTLE_COMMAND            , .data = "STATUS_CODE_UNKNOWN_BTLE_COMMAND "           },
-  { .key = BLE_HCI_STATUS_CODE_UNKNOWN_CONNECTION_IDENTIFIER   , .data = "STATUS_CODE_UNKNOWN_CONNECTION_IDENTIFIER"   },
-  { .key = BLE_HCI_AUTHENTICATION_FAILURE                      , .data = "AUTHENTICATION_FAILURE "                     },
-  { .key = BLE_HCI_STATUS_CODE_PIN_OR_KEY_MISSING              , .data = "STATUS_CODE_PIN_OR_KEY_MISSING "             },
-  { .key = BLE_HCI_MEMORY_CAPACITY_EXCEEDED                    , .data = "MEMORY_CAPACITY_EXCEEDED "                   },
-  { .key = BLE_HCI_CONNECTION_TIMEOUT                          , .data = "CONNECTION_TIMEOUT "                         },
-  { .key = BLE_HCI_STATUS_CODE_COMMAND_DISALLOWED              , .data = "STATUS_CODE_COMMAND_DISALLOWED "             },
-  { .key = BLE_HCI_STATUS_CODE_INVALID_BTLE_COMMAND_PARAMETERS , .data = "STATUS_CODE_INVALID_BTLE_COMMAND_PARAMETERS" },
-  { .key = BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION           , .data = "REMOTE_USER_TERMINATED_CONNECTION"           },
-  { .key = BLE_HCI_REMOTE_DEV_TERMINATION_DUE_TO_LOW_RESOURCES , .data = "REMOTE_DEV_TERMINATION_DUE_TO_LOW_RESOURCES" },
-  { .key = BLE_HCI_REMOTE_DEV_TERMINATION_DUE_TO_POWER_OFF     , .data = "REMOTE_DEV_TERMINATION_DUE_TO_POWER_OFF"     },
-  { .key = BLE_HCI_LOCAL_HOST_TERMINATED_CONNECTION            , .data = "LOCAL_HOST_TERMINATED_CONNECTION "           },
-  { .key = BLE_HCI_UNSUPPORTED_REMOTE_FEATURE                  , .data = "UNSUPPORTED_REMOTE_FEATURE"                  },
-  { .key = BLE_HCI_STATUS_CODE_INVALID_LMP_PARAMETERS          , .data = "STATUS_CODE_INVALID_LMP_PARAMETERS "         },
-  { .key = BLE_HCI_STATUS_CODE_UNSPECIFIED_ERROR               , .data = "STATUS_CODE_UNSPECIFIED_ERROR"               },
-  { .key = BLE_HCI_STATUS_CODE_LMP_RESPONSE_TIMEOUT            , .data = "STATUS_CODE_LMP_RESPONSE_TIMEOUT "           },
-  { .key = BLE_HCI_STATUS_CODE_LMP_ERROR_TRANSACTION_COLLISION , .data = "STATUS_CODE_LMP_ERROR_TRANSACTION_COLLISION" },
-  { .key = BLE_HCI_STATUS_CODE_LMP_PDU_NOT_ALLOWED             , .data = "STATUS_CODE_LMP_PDU_NOT_ALLOWED"             },
-  { .key = BLE_HCI_INSTANT_PASSED                              , .data = "INSTANT_PASSED "                             },
-  { .key = BLE_HCI_PAIRING_WITH_UNIT_KEY_UNSUPPORTED           , .data = "PAIRING_WITH_UNIT_KEY_UNSUPPORTED"           },
-  { .key = BLE_HCI_DIFFERENT_TRANSACTION_COLLISION             , .data = "DIFFERENT_TRANSACTION_COLLISION"             },
-  { .key = BLE_HCI_PARAMETER_OUT_OF_MANDATORY_RANGE            , .data = "PARAMETER_OUT_OF_MANDATORY_RANGE "           },
-  { .key = BLE_HCI_CONTROLLER_BUSY                             , .data = "CONTROLLER_BUSY"                             },
-  { .key = BLE_HCI_CONN_INTERVAL_UNACCEPTABLE                  , .data = "CONN_INTERVAL_UNACCEPTABLE "                 },
-  { .key = BLE_HCI_DIRECTED_ADVERTISER_TIMEOUT                 , .data = "DIRECTED_ADVERTISER_TIMEOUT"                 },
-  { .key = BLE_HCI_CONN_TERMINATED_DUE_TO_MIC_FAILURE          , .data = "CONN_TERMINATED_DUE_TO_MIC_FAILURE "         },
-  { .key = BLE_HCI_CONN_FAILED_TO_BE_ESTABLISHED               , .data = "CONN_FAILED_TO_BE_ESTABLISHED"               }
-};
-
-lookup_table_t const _strhci_table =
-{
-  .count = arrcount(_strhci_lookup),
-  .items = _strhci_lookup
-};
-
-
-const char* dbg_hci_str(uint8_t id)
-{
-  return (const char *) lookup_find(&_strhci_table, id);
 }
 
 #endif
