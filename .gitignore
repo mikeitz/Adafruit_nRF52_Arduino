@@ -2,6 +2,9 @@
 *.o
 *.obj
 
+# Allow compiled nordic sdk object files.
+!/cores/**/*.o
+
 # Visual Studio Code
 **/.vscode/
 
