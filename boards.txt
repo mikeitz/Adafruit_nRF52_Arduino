@@ -26,6 +26,8 @@ feather52840.build.gzll.objs={nordic.path}/gzll/objs_52840/nrf_assert_internal.c
 
 itsybitsy52840.build.gzll.objs={nordic.path}/gzll/objs_52840/nrf_assert_internal.c.o {nordic.path}/gzll/objs_52840/nrf_channel_manager.c.o {nordic.path}/gzll/objs_52840/nrf_fifo.c.o {nordic.path}/gzll/objs_52840/nrf_flywheel.c.o {nordic.path}/gzll/objs_52840/nrf_gzll.c.o {nordic.path}/gzll/objs_52840/nrf_impala.c.o {nordic.path}/gzll/objs_52840/nrf_link_core.c.o {nordic.path}/gzll/objs_52840/nrf_notification_manager.c.o {nordic.path}/gzll/objs_52840/nrf_packet_manager.c.o {nordic.path}/gzll/objs_52840/nrf_state_machine.c.o
 
+feather52832.build.gzll.objs=
+
 # ----------------------------------
 # Bluefruit Feather nRF52832
 # ----------------------------------
